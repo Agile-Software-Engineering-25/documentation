@@ -11,35 +11,34 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Requirements Overview',
+    title: 'Project Requirements at a Glance',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Find all the Project requirements in this website.
+        Easily explore all project requirements in one convenient location.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Centralized Technical Knowledge',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Access comprehensive technical information and resources, all in a single, organized hub.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Fully Customizable Documentation',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Want to contribute or tailor the docs? Open a pull request to add your own sections or update existing content with ease.
       </>
     ),
   },
 ];
+
 
 function Feature({ title, Svg, description }: FeatureItem) {
   return (
