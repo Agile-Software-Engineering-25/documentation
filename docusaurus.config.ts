@@ -9,10 +9,27 @@ const config: Config = {
   tagline: "Hochschul Verwaltungs System",
   favicon: "img/favicon.ico",
 
+  url: "https://agile-software-engineering-25.github.io", // <- No trailing slash
+  baseUrl: "/documentation/", // <- Important: starts and ends with a slash if using trailingSlash: true
+  organizationName: "Agile-Software-Engineering-25", // <- GitHub org name
+  projectName: "documentation", // <- Repo name
+  trailingSlash: false, // Recommended to avoid double slashes on GitHub Pages
+
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
   },
+  plugins: [
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "requirements",
+        path: "requirements",
+        routeBasePath: "requirements",
+        sidebarPath: require.resolve("./sidebars.js"),
+      },
+    ],
+  ],
 
   // Set the production url of your site here
   url: "https://your-docusaurus-site.example.com",
@@ -66,9 +83,16 @@ const config: Config = {
       items: [
         {
           type: "docSidebar",
-          sidebarId: "tutorialSidebar",
+          sidebarId: "documentationSidebar",
           position: "left",
           label: "Documentation",
+        },
+        {
+          to: "requirements/Intro",
+          sideBarId: "requirementsSidebar",
+          position: "left",
+          label: "Requirements",
+          activeBaseRegex: "/requirements/",
         },
         {
           href: "https://github.com/facebook/docusaurus",
@@ -81,14 +105,19 @@ const config: Config = {
       style: "dark",
       links: [
         {
-          title: "Docs",
+          title: "Overview",
           items: [
             {
-              label: "Tutorial",
+              label: "Docs",
               to: "/docs/intro",
+            },
+            {
+              label: "Requirements",
+              to: "/requirements/intro",
             },
           ],
         },
+
         {
           title: "Community",
           items: [
