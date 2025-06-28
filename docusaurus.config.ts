@@ -88,7 +88,7 @@ const config: Config = {
           label: "Documentation",
         },
         {
-          to: "requirements/Intro",
+          to: "requirements/intro",
           sideBarId: "requirementsSidebar",
           position: "left",
           label: "Requirements",
