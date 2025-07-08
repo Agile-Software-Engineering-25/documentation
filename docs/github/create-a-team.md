@@ -10,7 +10,7 @@ This is a short guide to show how you can create a team inside our GitHub Organi
 - Navigate to [github.com/orgs/Agile-Software-Engineering-25/teams](https://github.com/orgs/Agile-Software-Engineering-25/teams)
 
 ## 2. Create a new Team
-- Hit the **New team** Button
+- Hit the `New team` button
 
 ![Screenshot](/img/github/create-a-team/create-team.png)
 
