@@ -4,7 +4,7 @@ sidebar_custom_props:
 ---
 
 # Creating a Team in GitHub
-This is a short guide to show how you can create a team inside our GitHub Organisation.
+This is a short guide to show how you can create a team inside our GitHub Organization.
 
 ## 1. Go to the Teams section of the Organization
 - Navigate to [github.com/orgs/Agile-Software-Engineering-25/teams](https://github.com/orgs/Agile-Software-Engineering-25/teams)
