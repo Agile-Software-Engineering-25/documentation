@@ -31,7 +31,7 @@ This is a short guide to show how you can create a team inside our GitHub Organi
 ![Screenshot](/img/github/create-a-team/add-team-member.png)
 
 ## 5. Add repos
-Assign repo access + permissions per repo:
+Assign repo access and permissions per repo:
 1. Navigate to the repository you want to assign to your team
 2. Go to `Settings` &rarr; `Manage access`
 3. Click `Collaborators and teams`
