@@ -26,7 +26,7 @@ This is a short guide to show how you can create a team inside our GitHub Organi
 
 ## 4. Add Members
 - Add org members by username \
-*(only organisation members can be invited)*
+*(only organization members can be invited)*
 
 ![Screenshot](/img/github/create-a-team/add-team-member.png)
 
