@@ -1,0 +1,15 @@
+{
+  "id": "intro",
+  "title": "Requirements",
+  "description": "Soon to come",
+  "source": "@site/requirements/intro.md",
+  "sourceDirName": ".",
+  "slug": "/intro",
+  "permalink": "/documentation/requirements/intro",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "requirementsSidebar"
+}

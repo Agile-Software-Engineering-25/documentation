@@ -1,0 +1,28 @@
+{
+  "id": "application-tests/integration-tests",
+  "title": "Integration Tests",
+  "description": "Integration tests verify that different modules or services of your application interact correctly. When dealing with web applications, this often involves testing user flows that span multiple components or pages. Playwright is an excellent tool for end-to-end and integration testing, and by adopting the Page Object Model (POM), we can write tests that are maintainable, readable, and less prone to breaking.",
+  "source": "@site/docs/application-tests/integration-tests.md",
+  "sourceDirName": "application-tests",
+  "slug": "/application-tests/integration-tests",
+  "permalink": "/documentation/docs/application-tests/integration-tests",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/application-tests/integration-tests.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_custom_props": {
+      "myEmoji": "📚"
+    }
+  },
+  "sidebar": "requirementsSidebar",
+  "previous": {
+    "title": "Overview - Test",
+    "permalink": "/documentation/docs/application-tests/intro"
+  },
+  "next": {
+    "title": "Example - Basics",
+    "permalink": "/documentation/docs/category/example---basics-1"
+  }
+}
