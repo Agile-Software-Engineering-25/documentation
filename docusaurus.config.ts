@@ -29,6 +29,15 @@ const config: Config = {
         sidebarPath: require.resolve("./sidebars.js"),
       },
     ],
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "service-definitions",
+        path: "service-definitions",
+        routeBasePath: "service-definitions",
+        sidebarPath: require.resolve("./sidebars.js"),
+      },
+    ],
   ],
 
   // Set the production url of your site here
@@ -88,6 +97,13 @@ const config: Config = {
           activeBaseRegex: "/requirements/",
         },
         {
+          to: "service-definitions/intro",
+          sideBarId: "serviceDefinitionsSidebar",
+          position: "left",
+          label: "Service Definitions",
+          activeBaseRegex: "/service-definitions/",
+        },
+        {
           href: "https://github.com/facebook/docusaurus",
           label: "GitHub",
           position: "right",
@@ -108,6 +124,10 @@ const config: Config = {
               label: "Requirements",
               to: "/requirements/intro",
             },
+            {
+              label: "Service Definitions",
+              to: "/service-definitions/intro"
+            }
           ],
         },
 
