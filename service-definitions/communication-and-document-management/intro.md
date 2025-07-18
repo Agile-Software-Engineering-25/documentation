@@ -1,0 +1,3 @@
+# General
+## Area 2
+This Area will take care about ...
