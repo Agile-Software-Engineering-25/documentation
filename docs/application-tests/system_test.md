@@ -40,6 +40,7 @@ A [demo project on GitHub](https://github.com/agile-software-engineering-25/demo
 | **Public Reports**       | Can reports (e.g. GitHub Pages) be made public? (security wise)     |
 | **Test Data & Users**    | How do we manage and reset test data and test accounts?             |
 | **Test Videos**          | Should we record test videos? Only on failures?                     |
+| **Ticket Integration**   | Should we link tests to tickets via annotations like `@Ticket("JIRA-123")`? |
 
 ---
 
@@ -51,12 +52,55 @@ A [demo project on GitHub](https://github.com/agile-software-engineering-25/demo
 2. 🧩 **Implement Using the Page Object Pattern**  
    One class per page/component to encapsulate UI interactions.
 
-3. 🏷️ **Tag as Smoke Test (if applicable)**  
-   Use `@Tag("smoke")` in JUnit 5 for quick execution.
+3. 🏷️ **Tag as Smoke Test**  
+   Use `@Tag("smoke")` for critical test paths.
 
-For details check out the demo project.
+4. 🧪 **Group Related Tests**  
+   Tests that verify the same functionality (e.g., login behavior) should be grouped in a **dedicated test class**.  
+   ➕ Even if there is only one test, a separate class should still be created per feature for clarity and scalability.
+
+5. 🎫 **(Optional) Link to Ticket System**  
+   Consider using annotations like `@Ticket("JIRA-123")` to trace tests to requirements or bug reports.
+
+For more details and code structure, check out the [demo project](https://github.com/agile-software-engineering-25/demo-system-test).
 
 ---
+
+## ✅ Sample Test: Login Functionality
+
+```java
+package com.ase.demo.tests;
+
+import com.ase.demo.base.TestBase;
+import com.ase.demo.pages.LoginPage;
+import com.ase.demo.pages.SecureAreaPage;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static io.qameta.allure.Allure.step;
+
+public class LoginTest extends TestBase {
+
+    @Test
+    @Tag("smoke")
+    void testSuccessfulLogin() {
+        step("Navigate to Login Page", () -> navigateToPath("/login"));
+
+        step("Login with valid credentials", () -> {
+            LoginPage loginPage = new LoginPage(page);
+            loginPage.login("tomsmith", "SuperSecretPassword!");
+        });
+
+        step("Verify successful login message and logout button", () -> {
+            SecureAreaPage secureAreaPage = new SecureAreaPage(page);
+            assertThat(secureAreaPage.getSuccessMessage())
+                .contains("You logged into a secure area!");
+            assertThat(secureAreaPage.isLogoutButtonVisible()).isTrue();
+        });
+    }
+}
+```
 
 ## 📊 Allure Reports
 
