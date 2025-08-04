@@ -24,7 +24,7 @@ Each team should create a dedicated page for their service using the provided te
 
 ## Contribution Guide
 To add your service:
-1. Copy the [service template](./service-template.md) into your service folder.
+1. Copy the [service template](service-template.md) into your service folder.
 2. Fill in the details specific to your service.
 3. Add a link to your service page in the sidebar (if not automated).
 4. Keep your page updated as your service evolves.
