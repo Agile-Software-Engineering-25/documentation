@@ -32,7 +32,7 @@ This assumes you already did the first time setup of the frontend project.
 
 Now you can work on the shared-components library and see live updates in your frontend. When you create a new component in the library, you need to import and use it in your frontend project to see the live updates.
 
-Before you start working have a look through the README of the shared-components library to know how to create a new component or you might find component for it already.
+Before you start working, review the README of the shared-components library to learn how to create a new component, or you might find that a component already exists for your needs.
 
 ## 3. Feature developing is done
 
