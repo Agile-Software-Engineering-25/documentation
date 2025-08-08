@@ -26,7 +26,7 @@ No mocking of the controller, but mocking/stubbing of lower layers (e.g., servic
    
 ### Example Controller Test   
 Let's say we have this simple controller:   
-```
+```java
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -40,11 +40,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 }
-
-
 ```
+
 Here’s a corresponding controller test: (this file should lay inside `src/test/java/com/agilesoftwareengineering/[your-application]/UserControllerTest.class`)   
-```
+```java
 @WebMvcTest(UserController.class)
 class UserControllerTest {
 
@@ -65,8 +64,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.name").value("Alice"));
     }
 }
-
-
 ```
 ### Notes   
 - Stick to controller-only logic (i.e., no testing service/repo logic here).   
