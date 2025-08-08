@@ -8,7 +8,7 @@ sidebar_custom_props:
 
 shared-components is a library intended for use by all SAU frontends. It contains reusable components and a custom common theme called `joy`.
 
-If you think a component you created might be interesting for other teams then add it to the library or before you create one yourself look through the library maybe someone already created your component.
+If you think a component you created might be useful for other teams, add it to the library. Before creating a new component, check if someone has already created what you need.
 
 # ⚠️Disclaimer⚠️
 
