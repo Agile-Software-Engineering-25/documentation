@@ -5,7 +5,7 @@ sidebar_custom_props:
 
 # Getting Access to the Org & Team
 
-For work with GitHub, you will first be invited to our GitHub organisation, and then you can request to join the project team.
+For our GitHub-based work, you will first be invited to our GitHub organisation. Once you’ve joined, you can request access to the project team.
 
 ## Step 1 – Request an Invitation
 > ⚠️ **Important:** The access request form is only available until **21.08.2025**.  
@@ -26,12 +26,13 @@ For work with GitHub, you will first be invited to our GitHub organisation, and 
 1. Go to our organisation page:  
    [https://github.com/Agile-Software-Engineering-25](https://github.com/Agile-Software-Engineering-25)
 2. Navigate to the **“Teams”** section.
-3. Find your **Area**.
-4. Click **“Request to join”**.
-3. Find your **Area**.
-5. Find your **Team**.
-6. Click **“Request to join”**.
+3. Locate your **Area**.
+4. Find your **Team** by entering your team number in the search box or by expanding the team hierarchy tree.  
+   ![Finding your team](files/github_find_team.jpg)
+5. Click **“Request to join”**.
+
+> 💡 If you are a **PO** or **Scrum Master**, please also request to join your dedicated area.
 
 ---
 
-✅ After approval, you’ll have access to the project repositories and resources.
+✅ Once your request is approved, you’ll have access to the project repositories and resources.
