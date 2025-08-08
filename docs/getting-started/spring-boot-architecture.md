@@ -3,7 +3,9 @@ sidebar_position: 3
 ---
 
 # Spring Boot Architecture
+
 ### Everything you need to know about the architecture of a Java Spring Boot application
+
 ![media_licdn_com_image](files/media_licdn_com_image.png)
 
 # Maven/Gradle:
@@ -61,7 +63,7 @@ primarily:
 
 Controllers are the entry points for external requests into your application. They are responsible for handling incoming
 HTTP requests, mapping them to appropriate methods, and returning responses. They act as the "front-desk" of your
-application.   
+application.  
 **Example:**
 A `UserController` might listen for `GET /users` requests to retrieve a list of users or `POST /users` to create a new
 user.
@@ -70,7 +72,7 @@ user.
 
 Services encapsulate the business logic of your application. They act as an intermediary between controllers and the
 data layer. Services perform complex operations, coordinate multiple data operations, and enforce business rules. They
-keep your controllers lean and focused on request handling.   
+keep your controllers lean and focused on request handling.  
 **Example:**
 A `UserService` would contain methods like `List<User> getAllUsers()`, `User createUser(User user)`, or
 `void updateUserDetails(Long userId, User updatedUser)`. These methods might involve fetching data, applying
@@ -82,13 +84,13 @@ The "Models" layer in Spring Boot is primarily managed through **Entities** and 
 of your data persistence.
 
 - **Entities:** These are plain old Java objects (POJOs) that represent the structure of your data and are typically
-  mapped to tables in a database. They define the attributes and relationships of your data.   
+  mapped to tables in a database. They define the attributes and relationships of your data.  
   **Example:**
   A `User` entity class would define properties like `id`, `username`, and `email`, often annotated with JPA (Java
   Persistence API) annotations to map to database columns.
 - **Repositories:** Repositories provide a standardized way to interact with your data source (e.g., a database). Spring
   Data JPA simplifies this by automatically generating common CRUD (Create, Read, Update, Delete) operations based on
-  method signatures. You define interfaces, and Spring provides the implementation.   
+  method signatures. You define interfaces, and Spring provides the implementation.  
   **Example:**
   A `UserRepository` interface would extend `JpaRepository<User, Long>`. You could then define custom query methods like
   `findByUsername(String username)`, which Spring automatically converts into SQL queries.
@@ -96,7 +98,7 @@ of your data persistence.
 ### 4. Config / Beans
 
 This layer is dedicated to defining application-wide configurations and shared components, often referred to as "Beans."
-Spring's Inversion of Control (IoC) container manages the lifecycle and dependencies of these beans.   
+Spring's Inversion of Control (IoC) container manages the lifecycle and dependencies of these beans.  
 **Examples:**
 
 - **Configuration Classes:** Classes annotated with `@Configuration` to define application settings, third-party library
@@ -113,19 +115,19 @@ The interaction between these layers follows a clear and logical flow:
    the business logic directly, delegates the responsibility to the **Service** layer (e.g.,
    `userService.getAllUsers()`).
 3. **Service Business Logic:** The **Service** method executes the necessary business logic. This often involves:
-    - Fetching data from the **Repository** layer (e.g., `userRepository.findAll()`).
-    - Applying transformations, validations, or complex calculations to the data.
-    - Potentially interacting with other services or external systems.
+   - Fetching data from the **Repository** layer (e.g., `userRepository.findAll()`).
+   - Applying transformations, validations, or complex calculations to the data.
+   - Potentially interacting with other services or external systems.
 4. **Repository Data Access:** The **Repository** interacts with the database to retrieve or persist data, abstracting
    away the low-level database operations.
-5. **Response Generation:** Once the Service has completed its task, it returns the processed data back to the *
-   *Controller**. The Controller then formats this data into an appropriate HTTP response (e.g., JSON) and sends it back
+5. **Response Generation:** Once the Service has completed its task, it returns the processed data back to the \*
+   \*Controller\*\*. The Controller then formats this data into an appropriate HTTP response (e.g., JSON) and sends it back
    to the client.
 
 ## Small Spring Boot Example: User Management
 
-Let's illustrate these concepts with a basic Spring Boot application for managing users.   
-**1. Model (Entity & Repository)**   
+Let's illustrate these concepts with a basic Spring Boot application for managing users.  
+**1. Model (Entity & Repository)**  
 First, define the `User` entity and its `UserRepository`.
 
 ```
@@ -206,7 +208,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 ```
 
-**2. Service**   
+**2. Service**  
 Now, create a `UserService` to handle the business logic.
 
 ```
@@ -262,7 +264,7 @@ public class UserService {
 
 ```
 
-**3. Controller**   
+**3. Controller**  
 Finally, create a `UserController` to expose REST endpoints.
 
 ```
@@ -332,7 +334,7 @@ public class UserController {
 
 ```
 
-**4. Configuration (Example for a simple web client)**   
+**4. Configuration (Example for a simple web client)**  
 While not strictly part of the core MVC flow, here's an example of a configuration class for a `WebClient` if you needed
 to make external HTTP calls.
 
@@ -356,8 +358,8 @@ public class WebClientConfig {
 
 ```
 
- --- 
+---
+
 This refined documentation and example should provide a solid foundation for understanding the basic usage and
 separation of logic in Spring Boot applications! Remember to include necessary dependencies in your `pom.xml` (e.g.,
-`spring-boot-starter-web`, `spring-boot-starter-data-jpa`, database driver like `h2` for in-memory testing).   
-   
+`spring-boot-starter-web`, `spring-boot-starter-data-jpa`, database driver like `h2` for in-memory testing).

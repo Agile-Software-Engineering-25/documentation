@@ -1,11 +1,12 @@
 ---
 sidebar_position: 8
 ---
+
 # Typescript Code Conventions
 
 # Typescript
 
-For Typescript we have some pretty easy conventions:   
+For Typescript we have some pretty easy conventions:  
 eslint:
 
 - 2 spaces for indentation
@@ -21,6 +22,4 @@ quality:
 - PascalCase for Interfaces, Components and Types
 - do not use abbreviations for naming of things
 - all function names should be descriptive enough to understand what is happening in the function
-- all variable names should be descriptive enough to understand what is happening   
-   
-   
+- all variable names should be descriptive enough to understand what is happening

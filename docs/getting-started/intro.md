@@ -1,26 +1,28 @@
 ---
 sidebar_position: 1
 ---
+
 # Architecture
+
 ## Overview about the architecture pages
 
 ## Name proposal
 
-**SAU (S**tudent **A**ssistance **U**tility)   
+**SAU (S**tudent **A**ssistance **U**tility)  
 sau.cloud (STRATO 2€/Monat (erste 12 Monate für 0,30€))
 
 ## Generic Architecture
 
-[Generic  Architecture](generic-architecture.md)
+[Generic Architecture](generic-architecture.md)
 
 ## Code Conventions
 
-[Typescript Code Conventions](typescript-code-conventions.md)    
+[Typescript Code Conventions](typescript-code-conventions.md)  
 [Java Code Conventions](java-code-conventions.md)
 
 ## Architecture
 
-[React Architecture](react-architecture.md)    
+[React Architecture](react-architecture.md)  
 [Spring Boot Architecture](spring-boot-architecture.md)
 
 ## Testing
@@ -42,4 +44,4 @@ sau.cloud (STRATO 2€/Monat (erste 12 Monate für 0,30€))
 
 ## todos:
 
-- reconsider pagination   
+- reconsider pagination
