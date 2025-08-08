@@ -30,7 +30,7 @@ This assumes you already did the first time setup of the frontend project.
 3. `npm i`
 4. `npm run dev`
 
-Now you can work on the shared-components library and see live updates in your frontend. If you create a new component in the library you need to use it in the frontend but will still receive live updates.
+Now you can work on the shared-components library and see live updates in your frontend. When you create a new component in the library, you need to import and use it in your frontend project to see the live updates.
 
 Before you start working have a look through the README of the shared-components library to know how to create a new component or you might find component for it already.
 
