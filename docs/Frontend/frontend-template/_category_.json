@@ -1,6 +1,6 @@
 {
-  "label": "shared-components",
-  "position": 2,
+  "label": "frontend-template",
+  "position": 1,
   "link": {
     "type": "generated-index"
   }
