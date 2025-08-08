@@ -1,3 +1,8 @@
+---
+sidebar_custom_props:
+  myEmoji: 📄️
+---
+
 # Getting Access to the Org & Team
 
 For work with GitHub, you will first be invited to our GitHub organisation, and then you can request to join the project team.
