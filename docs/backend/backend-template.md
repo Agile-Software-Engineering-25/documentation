@@ -10,12 +10,11 @@ The [backend-template](https://github.com/Agile-Software-Engineering-25/backend-
 
 ## How to setup:
 1. Navigate to the [backend-template](https://github.com/Agile-Software-Engineering-25/backend-template-java) repository
-2. Click on the green "Use this template" button (top right)
-3. Under General change the Owner to Agile-Software-Engineering-25
+2. Click on the "Fork" button 
+3. Change the Owner to Agile-Software-Engineering-25
 4. Name your repository `team-<Gruppennummer>-backend-<short description>` (e.g. `team-12-backend-exam_grads_doz`)
 5. Add a description (optional)
-6. Select "Public" as visibility
-7. Click on "Create repository from template"
+7. Click on "Create fork"
 
 # Support
 
