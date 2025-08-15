@@ -12,7 +12,7 @@ The [backend-template](https://github.com/Agile-Software-Engineering-25/backend-
 1. Navigate to the [backend-template](https://github.com/Agile-Software-Engineering-25/backend-template-java) repository
 2. Click on the "Fork" button 
 3. Change the Owner to Agile-Software-Engineering-25
-4. Name your repository `team-<Gruppennummer>-frontend-<short description>` (e.g. `team-12-frontend-exam_grads_doz`)
+4. Name your repository `team-<Gruppennummer>-backend-<short description>` (e.g. `team-12-backend-exam_grads_doz`)
 5. Add a description (optional)
 7. Click on "Create fork"
 
