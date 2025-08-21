@@ -8,11 +8,9 @@ sidebar_custom_props:
 For our GitHub-based work, you will first be invited to our GitHub organisation. Once you’ve joined, you can request access to the project team.
 
 ## Step 1 – Request an Invitation
-> ⚠️ **Important:** The access request form is only available until **21.08.2025**.  
-> Please submit your request before this date — late requests cannot be processed.
 
 1. Open the form:  
-   [📄 GitHub Access Request Form](https://py-bay.app.n8n.cloud/form/506dd53a-e175-4d10-9bd4-901b621f4d9a)
+   [📄 GitHub Access Request Form](https://n8n.pybay.de/form/506dd53a-e175-4d10-9bd4-901b621f4d9a)
 2. Enter your **GitHub account email**.  
    💡 *Make sure this is the email linked to your GitHub account!*
 3. Submit the form.
