@@ -4,69 +4,67 @@ sidebar_custom_props:
   myEmoji: 🏫
 ---
 
-# Dokumente & Newsfeed: Document Service
+# Documents & Newsfeed: Document Service
 
-#### Contact: Lennart Gerst
-
+#### Contact: Lennard Gerst
 
 ## Group: F2
 
-### 🔧 Technische Arbeitsbereiche
-1. **Arbeiten mit Umgebungsvariablen**
-2. **Usergruppenabhängigkeit (zentrale Rolle)**  
-   - Relevante Parameter: `ID`, `Rolle`, `Studiengruppe`, `Modul`, `Jahrgang`, `Fachrichtung`
+### 🔧 Technical Work Areas
+1. **Working with environment variables**
+2. **User group dependency (central role)**  
+   - Relevant parameters: `ID`, `Role`, `Study group`, `Module`, `Year`, `Field of study`
 
-### 🔗 Externe Abhängigkeiten
+### 🔗 External Dependencies
 
-#### Wichtigste Abhängigkeit nach F3
-- **User Berechtigung / Rollen**  
-  → Essentiell für alle Funktionalitäten in Dokumente & Newsfeed
+#### Main dependency on F3
+- **User permissions / roles**  
+  → Essential for all functions in Documents & Newsfeed
 
-#### Bestehende Abhängigkeiten **zu uns**:
-- Von **F4**: Zugang zu unserer Datenbank für **Stammdatenverwaltung**
-- Von **F1**: Zugang zu unserer Datenbank für **Stundenplan-Datenspeicherung**
+#### Existing dependencies **towards us**:
+- From **F4**: Access to our database for **master data management**  
+- From **F1**: Access to our database for **timetable data storage**
 
-### 🔄 Inter-SOS2-Ebenen-Abhängigkeiten
-- **Team 4 (DokM-Backend, Lennard)** ⇄ **Team 7 (DokM-Frontend, Santino)**  
-  Gemeinsame Schnittstellen zur Anzeige und Verwaltung dokumentenbasierter Inhalte
-- **Team 7 (Doku-Viewer, Santino)** → **Team 5 (Newsfeed)**  
-  **API-Aufruf von Team 7 an Team 5**, um Newsfeed-Daten basierend auf Nutzergruppeninformationen darzustellen
+### 🔄 Inter-SOS2 Level Dependencies
+- **Team 4 (DocM Backend, Lennard)** ⇄ **Team 7 (DocM Frontend, Santino)**  
+  Shared interfaces for displaying and managing document-based content  
+- **Team 7 (Doc Viewer, Santino)** → **Team 5 (Newsfeed)**  
+  **API call from Team 7 to Team 5** to show newsfeed data based on user group information  
 
-💬 **Abstract File Service (zentraler Speicherlayer)**  
-- Alle dateibezogenen Dienste (Dokumente, Newsfeed-Anhänge, Antragsformulare) sollten – soweit möglich – über den zentralen **Abstract File Service** laufen, um eine einheitliche Dateiablage, Berechtigungsprüfung und Wiederverwendbarkeit sicherzustellen.
+💬 **Abstract File Service (central storage layer)**  
+- All file-related services (documents, newsfeed attachments, application forms) should – whenever possible – use the central **Abstract File Service**.  
+- This ensures unified file storage, permission checks, and reusability.
 
+### 📌 Team Responsibilities
 
+| Team | Functionality | Dependencies |
+|------|---------------|--------------|
+| Khalid | User group–based **Newsfeed** | ID, Role, Study group, Module, Year, Field of study |
+| Santino | User group–based **Document display** | ID, Role, Study group, Module, Year, Field of study |
+| Lennard | User group–based **Document tagging** + Abstract File Service | ID, Role, Study group, Module, Year |
+| Josi | User group–based **Applications** | ID, Role, Study group, Module |
+| (all dealing with files) | Use of **Abstract File Service** recommended | — |
 
-### 📌 Team-spezifische Verantwortlichkeiten
-
-| Team | Funktionalität | Abhängigkeiten |
-|------|----------------|----------------|
-| Khalid | Usergruppenabhängiger **Newsfeed** | ID, Rolle, Studiengruppe, Modul, Jahrgang, Fachrichtung |
-| Santino | Usergruppenabhängige **Dokumentenanzeige** | ID, Rolle, Studiengruppe, Modul, Jahrgang, Fachrichtung |
-| Lennard | Usergruppenabhängiges **Tagging von Dokumenten** + Abstract File Service | ID, Rolle, Studiengruppe, Modul, Jahrgang |
-| Josi | Usergruppenabhängige **Anträge** | ID, Rolle, Studiengruppe, Modul |
-| (alle mit Dateibezug) | Nutzung des **Abstract File Service** empfohlen | — |
-
-### 🗃️ Datenbankabhängigkeiten
-- **F1**: Stundenplan-Daten
-- **F4**: Stammdatenverwaltung
+### 🗃️ Database Dependencies
+- **F1**: Timetable data  
+- **F4**: Master data management  
 
 ---
 
-## Exposing information
+## Exposing Information
 
-### Dokumentenservice (DokM-Backend)
+### Document Service (DocM Backend)
 
-- Mit der **User-ID** und zugehörigen Metadaten (`Rolle`, `Studiengruppe`, `Modul`, `Jahrgang`, `Fachrichtung`) können nutzerspezifisch relevante Dokumente abgefragt werden.
-- Dokumente sind mit **Tags** versehen, die über die genannten Userkontexte filtern lassen.
-- Beispielhafte Response für eine Dokumentanfrage:
+- With **User ID** and related metadata (`Role`, `Study group`, `Module`, `Year`, `Field of study`), user-specific relevant documents can be retrieved.  
+- Documents have **tags** that filter content based on the user context.  
+- Example response for a document request:
 
 ```json
 [
   {
     "document_id": "doc-uuid",
-    "title": "Modulhandbuch WI 2025",
-    "tags": ["WI", "2025", "Modulhandbuch"],
+    "title": "Module Handbook WI 2025",
+    "tags": ["WI", "2025", "Handbook"],
     "visibility": {
       "role": ["student", "lecturer"],
       "study_group": ["WI"],
@@ -74,6 +72,6 @@ sidebar_custom_props:
     },
     "uploaded_by": "lecturer-uuid",
     "uploaded_at": "2025-05-20T12:45:00Z",
-    "abstract": "Modulbeschreibungen für das Studienjahr 2025"
+    "abstract": "Module descriptions for the academic year 2025"
   }
 ]
