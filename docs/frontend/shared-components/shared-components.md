@@ -6,18 +6,24 @@ sidebar_custom_props:
 
 # About
 
-shared-components is a library intended for use by all SAU frontends. It contains reusable components and a custom common theme called `joy`.
+The **shared-components library** is the central place for reusable UI components and a common `joy` theme.  
+It is used by **all SAU frontend teams** to ensure a consistent look & feel and to avoid duplicate work.
 
-If you think a component you created might be useful for other teams, add it to the library. Before creating a new component, check if someone has already created what you need.
+Before creating a new component in your project, always check if it already exists here.  
+If not, you can request a new component so it becomes available for everyone (see [Request a new shared component](./request-shared-component.md)).
 
-# ⚠️Disclaimer⚠️
+# ⚠️ Disclaimer ⚠️
 
-All Components and the joy theme in this repository are **ONLY** examples and **NEED** to be exchanged with real ones. Expect them to be deleted or massively changed.
+All components and the `joy` theme in this repository are currently **examples**.  
+They **will be replaced or heavily changed** once real production components are introduced.
 
 # Installation & Usage
 
-See the [frontend-template-repository](https://github.com/Agile-Software-Engineering-25/frontend-template) and the [shared-components-repository](https://github.com/Agile-Software-Engineering-25/shared-components) for installation and usage.
+For setup and usage examples, see:  
+- [Frontend template repository](https://github.com/Agile-Software-Engineering-25/frontend-template)  
+- [Shared components repository](https://github.com/Agile-Software-Engineering-25/shared-components)  
+
 
 # Support
 
-If you encounter any problems reach out to Alexander Jablonowski or Team 15.
+If you encounter any problems reach out to **Alexander Jablonowski** or **Team 15**.
