@@ -45,3 +45,20 @@ COPY --from=build /app/target/*.jar /app/app.jar
 EXPOSE 8080
 ENTRYPOINT ["sh","-c","java $JAVA_OPTS -jar /app/app.jar"]
 ```
+
+### Dockerfile for a vite app
+
+```dockerfile
+FROM node:24-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+# important to set the correct path for your app
+ARG BASE_PATH=/<team>/app/<app-path>/
+RUN npm run build -- --base=${BASE_PATH}
+
+# --- serve
+FROM nginxinc/nginx-unprivileged:1.29.1-alpine
+COPY --from=build /app/dist /usr/share/nginx/html/<team>/app/<app-path>/
+```

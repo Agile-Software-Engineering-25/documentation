@@ -25,8 +25,8 @@ title: Quickstart
    If you want to add a ingress to your configuration to make the application accessible over the internet you will need to set the ingress path to `/ase-<YOUR-TEAMNUMBER>/<SERVICE-NAME>/` and add tls configuration on your own. (Might now even work currently) The ingress base path for each team will and tls configuration will be set automatically in the future.
    :::
 
-6. Create a `.github/workflowS` directory in the root of your project
-7. Create a `deploy-application.yAml` file in the directory and paste this into it:
+6. Create a `.github/workflows` directory in the root of your project
+7. Create a `deploy-application.yaml` file in the directory and paste this into it:
 
 ```yaml
 name: deploy-to-k8s
@@ -41,9 +41,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v5
 
-        # TODO: Change this to the real action
       - name: Upload image
-        uses: Agile-Software-Engineering-25/upload-image@v1
+        uses: Agile-Software-Engineering-25/build-and-publish-image@v1
 
       - name: Deploy to Namespace
         uses: Agile-Software-Engineering-25/deploy-to-k8s@v1
