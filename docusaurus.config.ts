@@ -77,9 +77,9 @@ const config: Config = {
     // Replace with your project's social card
     image: "img/docusaurus-social-card.jpg",
     navbar: {
-      title: "HVS",
+      title: "SAU",
       logo: {
-        alt: "HVS Logo",
+        alt: "SAU Logo",
         src: "img/logo.svg",
       },
       items: [
@@ -126,8 +126,8 @@ const config: Config = {
             },
             {
               label: "Service Definitions",
-              to: "/service-definitions/intro"
-            }
+              to: "/service-definitions/intro",
+            },
           ],
         },
 

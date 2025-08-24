@@ -1,10 +1,9 @@
 ---
-sidebar_position: 6
+sidebar_position: 2
+title: Vite Example
 ---
 
-# Templates
-
-## vite template
+# Vite template
 
 ### dockerfile
 
@@ -23,7 +22,7 @@ FROM nginxinc/nginx-unprivileged:1.29.1-alpine
 COPY --from=build /app/dist /usr/share/nginx/html/<team>/app/<app-path>/
 ```
 
-### main-ingress.yaml 
+### main-ingress.yaml
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -35,7 +34,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
   ingressClassName: traefik
-  tls: [ { hosts: ["sau-portal.de"], secretName: still-to-come-tls } ]
+  tls: [{ hosts: ["sau-portal.de"], secretName: still-to-come-tls }]
   rules:
     - host: sau-portal.de
       http:
@@ -85,7 +84,7 @@ kind: ConfigMap
 metadata:
   name: <app-name>-nginx
   namespace: <team>
-data: # remember to change data for your team in this config and dont just copy it 
+data: # remember to change data for your team in this config and dont just copy it
   nginx.conf: |
  worker_processes 1;
     events { worker_connections 1024; }
@@ -139,12 +138,12 @@ spec:
         - name: <pull-secret-name> # e.g ghrc-secret
       securityContext:
         runAsNonRoot: true
-        runAsUser: 101        
+        runAsUser: 101
         runAsGroup: 101
         fsGroup: 101
       containers:
         - name: web
-          image:  ghcr.io/agile-software-engineering-25/<image>:<tag> # e.g ghcr.io/agile-software-engineering-25/python-k3s-demo:latest
+          image: ghcr.io/agile-software-engineering-25/<image>:<tag> # e.g ghcr.io/agile-software-engineering-25/python-k3s-demo:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -159,7 +158,7 @@ spec:
             periodSeconds: 10
           resources:
             requests: { cpu: "100m", memory: "128Mi" }
-            limits:   { cpu: "500m", memory: "256Mi" }
+            limits: { cpu: "500m", memory: "256Mi" }
           volumeMounts:
             - name: nginx-conf
               mountPath: /etc/nginx/nginx.conf
@@ -192,10 +191,9 @@ metadata:
 spec:
   type: ClusterIP
   selector: { app.kubernetes.io/name: <app-name> }
-  ports: [ { name: http, port: 80, targetPort: 8080 } ]
-  ```
+  ports: [{ name: http, port: 80, targetPort: 8080 }]
+```
 
 ### kustomization.yaml
 
 ### overlay
-

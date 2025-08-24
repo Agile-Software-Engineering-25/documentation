@@ -1,6 +1,6 @@
 ---
-sidebar_position: 3
-title: Build & Publish a Docker Image
+sidebar_position: 1
+title: Build & Publish a Maven Docker Image
 ---
 
 ## Prerequisites
@@ -44,3 +44,4 @@ COPY --from=build /app/target/*.jar /app/app.jar
 
 EXPOSE 8080
 ENTRYPOINT ["sh","-c","java $JAVA_OPTS -jar /app/app.jar"]
+```

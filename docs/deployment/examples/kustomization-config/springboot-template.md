@@ -1,10 +1,9 @@
 ---
-sidebar_position: 5
+sidebar_position: 1
+title: Springboot Example
 ---
 
-# Templates
-
-## Springboot template
+# Springboot template
 
 These are templates for a springboot deployment
 
@@ -22,7 +21,7 @@ spec:
   ingressClassName: traefik
   tls:
     - hosts: ["sau-portal.de"]
-      secretName: tls-to-come 
+      secretName: tls-to-come
   rules:
     - host: sau-portal.de
       http:
@@ -43,7 +42,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: <service-name>
-  namespace: <team>                        # e.g. ase-1
+  namespace: <team> # e.g. ase-1
   labels:
     app.kubernetes.io/name: <service-name>
     app.kubernetes.io/instance: <service-name>
@@ -73,10 +72,10 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
       imagePullSecrets:
-        - name: <pull-secret-name>         # pull secret, e.g ghrc-secret
+        - name: <pull-secret-name> # pull secret, e.g ghrc-secret
       containers:
         - name: app
-          image: ghcr.io/agile-software-engineering-25/<image>:<tag>  # e.g. ghcr.io/agile-software-engineering-25/python-k3s-demo:latest
+          image: ghcr.io/agile-software-engineering-25/<image>:<tag> # e.g. ghcr.io/agile-software-engineering-25/python-k3s-demo:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -143,7 +142,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: <service-name>
-  namespace: <team>      # e.g ase-1        
+  namespace: <team> # e.g ase-1
 spec:
   selector:
     app.kubernetes.io/name: <service-name>

@@ -11,9 +11,9 @@ title: Rancher
 4. View your Pods, Deployments, and Services for your namespace.
 
 :::note
-You have the freedom to manage resources **within your own namespace**.
+The namespace of your team follows this pattern: `ase-<YOUR-TEAMNUMBER>`
 :::
 
-:::tip
-If you can’t see your namespace, ask **Team 15** to grant access (RBAC).
+:::note
+You have the freedom to manage resources **within your own namespace**.
 :::
