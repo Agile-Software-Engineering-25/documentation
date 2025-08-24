@@ -41,7 +41,10 @@ spec:
 
 **What’s happening**
 - Routes `https://sau-portal.de/<team>/<service-name>/*` to your Service on port 80.
-- Traefik terminates TLS using `tls-to-come`.
+- Traefik terminates TLS using `tls-to-come`. 
+   :::caution
+  currently there is no TLS for services
+   :::
 
 **Gotchas**
 - `tls.hosts` must include **exactly** the host(s) in your rules; if you later use another host, add it here too.

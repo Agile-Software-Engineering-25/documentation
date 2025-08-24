@@ -60,7 +60,9 @@ spec:
 **What’s happening:**
 - Routes `https://sau-portal.de/<team>/app/<app-path>/*` to your Service.
 - Traefik terminates TLS using the certificate in `secretName`.
-
+   :::caution
+  currently there is no TLS for services
+   :::
 **Gotchas:**
 - The `tls.hosts` list must contain **every** host you use. If your rule uses `sau-portal.de`, add that exact host in `tls.hosts` too, e.g. `hosts: ["sau-portal.de"]` (or include both).
 - If you change the sub-path, update **both** Ingress `path` and the Vite `base` setting.
