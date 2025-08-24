@@ -43,4 +43,4 @@ This ensures a consistent process across all teams and makes sure every request 
 If you encounter problems with the process:
 - Reach out to **Alexander Jablonowski** (board admin)  
 - Or contact **Team 15** (shared-components maintainers)
-- Simon Dietrich for form / automation (n8n) issues
+- Or contact **Simon Dietrich** for form / automation (n8n) issues
