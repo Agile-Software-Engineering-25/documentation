@@ -26,4 +26,4 @@ For setup and usage examples, see:
 
 # Support
 
-If you encounter any problems reach out to **Alexander Jablonowski** or **Team 15**.
+If you encounter any problems reach out to **Alexander Jablonowski**.
