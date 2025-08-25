@@ -7,6 +7,7 @@ sidebar_custom_props:
 # Contribute to the shared-components
 
 This is a step-by-step guide if you need to change some components or add new ones from the shared-components library.
+> 💡 If you have **not already requested a new component**, please first follow the [Request a new shared component](./request-shared-component.md) guide before starting development.
 
 ## 1. Setup shared-components
 
