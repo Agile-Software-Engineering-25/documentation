@@ -5,6 +5,14 @@ title: Quickstart
 
 ## Deploy your service
 
+:::warning
+Please constraint from deploying a frontend
+:::
+
+:::tip
+In most scenarios, running a single pod is enough for your service.
+:::
+
 1. Get your kubeconfig
    1. Go to https://rancher.sau-portal.de/dashboard/c/local/
    2. Copy the kubeconfig of your team to your clipboard
@@ -43,7 +51,7 @@ jobs:
 
       - name: Upload image
         uses: Agile-Software-Engineering-25/build-and-publish-image@v1
-
+        
       - name: Deploy to Namespace
         uses: Agile-Software-Engineering-25/deploy-to-k8s@v1
         with:
