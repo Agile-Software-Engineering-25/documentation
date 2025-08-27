@@ -1,7 +1,7 @@
 import type * as Preset from "@docusaurus/preset-classic";
 import type { Config } from "@docusaurus/types";
 import { themes as prismThemes } from "prism-react-renderer";
-
+import { generateScalarConfigs } from './scalar-configs';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
@@ -38,17 +38,8 @@ const config: Config = {
         sidebarPath: require.resolve("./sidebars.js"),
       },
     ],
-    [
-      '@scalar/docusaurus',
-      {
-        label: 'Notifications API',
-        route: '/documentation/service-definitions/examination-and-grade-management/notification-service-api',
-        showNavLink: false,
-        configuration: {
-          url: '/documentation/openapi/notifications.json',
-        },
-      },
-    ],
+    // Spread all the Scalar configurations from the TypeScript function
+    ...generateScalarConfigs(),
   ],
 
   // Set the production url of your site here
