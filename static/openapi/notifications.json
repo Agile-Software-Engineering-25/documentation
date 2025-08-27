@@ -1,0 +1,148 @@
+{
+    "openapi": "3.1.1",
+    "info": {
+      "title": "Notification Microservice API",
+      "description": "Mikroservice für Benachrichtigungen - ermöglicht das Versenden von Nachrichten an User oder Usergruppen",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "https://sau-portal.de/ase-15/notification-service",
+        "description": "Production server (deployment only with authentication!)"
+      }
+    ],
+    "security": [
+      {
+        "middlewareAuth": []
+      }
+    ],
+    "paths": {
+      "/notifications": {
+        "post": {
+          "summary": "Send notification",
+          "description": "Sendet eine Benachrichtigung an einen oder mehrere User oder an eine Usergruppe",
+          "operationId": "sendNotification",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Notification sent successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/NotificationResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "middlewareAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "description": "Authentication through Luca Schmitz's team middleware"
+        }
+      },
+      "schemas": {
+        "NotificationRequest": {
+          "type": "object",
+          "required": [
+            "title",
+            "recipients",
+            "message"
+          ],
+          "properties": {
+            "priority": {
+              "type": "boolean",
+              "default": false,
+              "description": "Priorität der Benachrichtigung"
+            },
+            "title": {
+              "type": "string",
+              "description": "Titel der Benachrichtigung"
+            },
+            "recipients": {
+              "type": "integer",
+              "description": "Empfänger der Benachrichtigung"
+            },
+            "shortDescription": {
+              "type": "string",
+              "description": "Kurze Beschreibung der Benachrichtigung"
+            },
+            "message": {
+              "type": "string",
+              "description": "Die Nachricht der Benachrichtigung"
+            }
+          }
+        },
+        "NotificationResponse": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "ID der gesendeten Benachrichtigung"
+            },
+            "status": {
+              "type": "string",
+              "description": "Status der Benachrichtigung"
+            }
+          }
+        },
+        "ErrorResponse": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string",
+              "description": "Fehlermeldung"
+            },
+            "details": {
+              "type": "string",
+              "description": "Detaillierte Fehlerbeschreibung"
+            }
+          }
+        }
+      }
+    }
+  }

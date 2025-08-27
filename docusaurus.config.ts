@@ -38,6 +38,17 @@ const config: Config = {
         sidebarPath: require.resolve("./sidebars.js"),
       },
     ],
+    [
+      '@scalar/docusaurus',
+      {
+        label: 'Notifications API',
+        route: '/documentation/service-definitions/examination-and-grade-management/notification-service-api',
+        showNavLink: false,
+        configuration: {
+          url: '/documentation/openapi/notifications.json',
+        },
+      },
+    ],
   ],
 
   // Set the production url of your site here
