@@ -25,11 +25,10 @@ const apiDefinitions: ApiDefinition[] = [
     path: 'examination-and-grade-management/notification-service-api',
     showInNav: false,
   },
-  // Uncomment and add more APIs as needed
   // {
-  //   name: 'user-management',
-  //   label: 'User Management API',
-  //   path: 'user-management/user-management-api',
+  //   name: 'api-name',
+  //   label: 'api-name API',
+  //   path: 'path/where/api',
   //   showInNav: false,
   // },
 ];
@@ -38,7 +37,7 @@ export const generateScalarConfigs = (): PluginConfig[] => {
   return apiDefinitions.map((api): PluginConfig => [
     '@scalar/docusaurus',
     {
-      id: `scalar-${api.name}`, // Unique ID for each plugin instance
+      id: `scalar-${api.name}`,
       label: api.label,
       route: `/documentation/service-definitions/${api.path}`,
       showNavLink: api.showInNav,
