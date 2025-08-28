@@ -13,15 +13,20 @@
   ],
   "security": [
     {
-      "middlewareAuth": []
+      "bearerAuth": []
     }
   ],
   "paths": {
     "/notifications": {
       "post": {
         "summary": "Send notification",
-        "description": "Sends a notification to one or more users or to a user group",
+        "description": "Sends a notification to one or more users or to a user group. Requires a valid JWT Bearer Token.",
         "operationId": "sendNotification",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -54,7 +59,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "Unauthorized – JWT is missing or invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -64,7 +69,7 @@
             }
           },
           "403": {
-            "description": "Forbidden",
+            "description": "Forbidden – User not allowed to perform this action",
             "content": {
               "application/json": {
                 "schema": {
@@ -79,10 +84,11 @@
   },
   "components": {
     "securitySchemes": {
-      "middlewareAuth": {
+      "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "description": "Authentication through Luca Schmitz's team middleware"
+        "bearerFormat": "JWT",
+        "description": "JWT-based authentication using Bearer tokens"
       }
     },
     "schemas": {
