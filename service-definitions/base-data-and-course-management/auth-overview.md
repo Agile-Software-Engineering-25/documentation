@@ -167,11 +167,11 @@ APIs from Team‑11 allow access to extended user master data:
 
 ### Course Master Data - Team-9
 Team‑9 provides APIs for course-related structures:  
-- Provision of study programs  
-- Provision of modules  
-- Provision of courses  
-- Retrieve which modules belong to a specific study program  
-- Retrieve which courses belong to a specific module  
+- Provision of study program templates (i.e. virtual Modulhandbuch for the study program) and study program instances (i.e. specific program for a student group)
+- Provision of module templates and specific module instances  
+- Provision of courses templates and specific course instances 
+- Retrieve which modules belong to which study program(s)
+- Retrieve which courses belong to a specific module
 
 **API definition:** Coming soon  
 **Contact person:** Patricia Schiewald
