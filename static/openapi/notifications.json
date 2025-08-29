@@ -2,7 +2,7 @@
   "openapi": "3.1.1",
   "info": {
     "title": "Notification Microservice API",
-    "description": "Microservice for notifications – allows sending messages to users or user groups",
+    "description": "Microservice for notifications – allows sending messages to users or user groups.\n\nAnyone who wants to use the message sending functionality in their service must have Team 10 add the role \"Area-4.Team-15.Write.SendNotification\" to their service. With this role, the service can obtain a JWT, which it then sends along with the request, allowing us to verify the permissions.",
     "version": "1.0.0"
   },
   "servers": [
