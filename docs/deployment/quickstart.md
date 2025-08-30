@@ -51,12 +51,12 @@ jobs:
 
       - name: Upload image
         uses: Agile-Software-Engineering-25/build-and-publish-image@v1
-        
+
       - name: Deploy to Namespace
         uses: Agile-Software-Engineering-25/deploy-to-k8s@v1
         with:
           kubeconfig: ${{ secrets.KUBECONFIG }}
-          namespace: ${{ variables.KUBECONFIG }}
+          namespace: ${{ variables.K8S_NAMESPACE }}
 ```
 
 8. Your application should now be deployed :D  
