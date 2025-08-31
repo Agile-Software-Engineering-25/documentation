@@ -1,0 +1,154 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Notification Microservice API",
+    "description": "Microservice for notifications – allows sending messages to users or user groups.\n\nAnyone who wants to use the message sending functionality in their service must have Team 10 add the role \"Area-4.Team-15.Write.SendNotification\" to their service. With this role, the service can obtain a JWT, which it then sends along with the request, allowing us to verify the permissions.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://sau-portal.de/ase-15/notification-service",
+      "description": "Production server (deployment only with authentication!)"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/notifications": {
+      "post": {
+        "summary": "Send notification",
+        "description": "Sends a notification to one or more users or to a user group. Requires a valid JWT Bearer Token.",
+        "operationId": "sendNotification",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Notification sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – JWT is missing or invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden – User not allowed to perform this action",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "JWT-based authentication using Bearer tokens"
+      }
+    },
+    "schemas": {
+      "NotificationRequest": {
+        "type": "object",
+        "required": [
+          "title",
+          "recipients",
+          "message"
+        ],
+        "properties": {
+          "priority": {
+            "type": "boolean",
+            "default": false,
+            "description": "Priority of the notification"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the notification"
+          },
+          "recipients": {
+            "type": "integer",
+            "description": "Recipients of the notification"
+          },
+          "shortDescription": {
+            "type": "string",
+            "description": "Short description of the notification"
+          },
+          "message": {
+            "type": "string",
+            "description": "The notification message"
+          }
+        }
+      },
+      "NotificationResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the sent notification"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status of the notification"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error message"
+          },
+          "details": {
+            "type": "string",
+            "description": "Detailed error description"
+          }
+        }
+      }
+    }
+  }
+}
