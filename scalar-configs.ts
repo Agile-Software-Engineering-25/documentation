@@ -16,6 +16,7 @@ interface ApiDefinition {
   label: string;
   path: string;
   showInNav: boolean;
+  yamlSpec?: boolean;
 }
 
 const apiDefinitions: ApiDefinition[] = [
@@ -25,6 +26,13 @@ const apiDefinitions: ApiDefinition[] = [
     path: 'examination-and-grade-management/notification-service-api',
     showInNav: false,
   },
+  {
+    name: 'room-management',
+    label: 'Room Management API',
+    path: 'timetable-planning-and-resource-management/room-management',
+    showInNav: false,
+    yamlSpec: true,
+  }
   // {
   //   name: 'api-name',
   //   label: 'api-name API',
@@ -42,7 +50,7 @@ export const generateScalarConfigs = (): PluginConfig[] => {
       route: `/documentation/service-definitions/${api.path}`,
       showNavLink: api.showInNav,
       configuration: {
-        url: `/documentation/openapi/${api.name}.json`,
+        url: `/documentation/openapi/${api.name}.${api.yamlSpec ? 'yaml' : 'json'}`,
       },
     },
   ]);
