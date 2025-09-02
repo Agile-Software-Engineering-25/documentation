@@ -110,7 +110,7 @@
             "description": "Title of the notification"
           },
           "recipients": {
-            "type": "integer",
+            "type": "string (UUID)",
             "description": "Recipients of the notification"
           },
           "shortDescription": {
