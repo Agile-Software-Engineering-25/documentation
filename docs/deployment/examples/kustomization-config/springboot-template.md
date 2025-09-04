@@ -22,10 +22,7 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure # send traffic over HTTPS
 spec:
-  ingressClassName: traefik
-  tls:
-    - hosts: ["sau-portal.de"]           
-      secretName: tls-to-come              
+  ingressClassName: traefik      
   rules:
     - host: sau-portal.de
       http:
@@ -41,10 +38,7 @@ spec:
 
 **What’s happening**
 - Routes `https://sau-portal.de/<team>/<service-name>/*` to your Service on port 80.
-- Traefik terminates TLS using `tls-to-come`. 
-   :::caution
-  currently there is no TLS for services
-   :::
+- Traefik terminates TLS natively via the default certifcate provided by us
 
 **Gotchas**
 - `tls.hosts` must include **exactly** the host(s) in your rules; if you later use another host, add it here too.
