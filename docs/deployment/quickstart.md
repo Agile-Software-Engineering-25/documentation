@@ -56,7 +56,7 @@ jobs:
         uses: Agile-Software-Engineering-25/deploy-to-k8s@v1
         with:
           kubeconfig: ${{ secrets.KUBECONFIG }}
-          namespace: ${{ variables.K8S_NAMESPACE }}
+          namespace: ${{ vars.K8S_NAMESPACE }}
 ```
 
 8. Your application should now be deployed :D  
