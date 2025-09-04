@@ -7,9 +7,9 @@ title: Database connection
 
 Each team has: 
 
-- One database user: ase-n
+- One database user: ```ase-<team-number>```
 
-- One private schema: ase-n_schema 
+- One private schema: ```ase-<team-number>_schema``` 
 
 - One shared database: appdb
 
@@ -22,22 +22,27 @@ Your account can only create/read/write objects inside your schema.
 
 ## Credentials
 
-- Username: ase-n depending on your team
+- Username: ```ase-<team-number>``` depending on your team
 - Password: intial given to you by **Team 15**
 
 ## Connect from Rancher
 
-1. In Rancher, go to your namespace (ase-n).
+1. In Rancher, go to your namespace (```ase-<team-number>```).
 2. Launch a shell pod (for example, run a postgres:17 image).
     - Rancher UI → Workloads → Deploy → Image: postgres:17 → Command: sleep 3600
+
+:::tip
+Change these values to your actual ones
+:::
+
 3. Exec into the pod via Rancher UI or kubectl exec:
 ```bash
 export PGPASSWORD=<your_team_password>
-psql -h postgres.db -U ase-N -d appdb
+psql -h postgres.db -U ase-<team-number> -d appdb
 ```
 4. Inside psql, you can run SQL in your schema:
 ```sql
--- see current schema path (should show ase-N_schema first)
+-- see current schema path (should show ase-<team-number>_schema first)
 SHOW search_path;
 
 -- create a test table in your schema
@@ -52,7 +57,7 @@ SELECT * FROM test_data;
 
 - Connection string: 
 ```bash
-postgresql://ase-N:<password>@postgres.db:5432/appdb
+postgresql://ase-<team-number>:<password>@postgres.db:5432/appdb
 ```
 - Example env in a deploament: 
 ```yaml
@@ -79,7 +84,7 @@ env:
 
 - Store creds in a Secret in your namespace:
 ```bash
-kubectl -n ase-N create secret generic db-credentials \
-  --from-literal=POSTGRES_USER=ase-N \
+kubectl -n ase-<team-number> create secret generic db-credentials \
+  --from-literal=POSTGRES_USER=ase-<team-number> \
   --from-literal=POSTGRES_PASSWORD='<password>'
 ```
