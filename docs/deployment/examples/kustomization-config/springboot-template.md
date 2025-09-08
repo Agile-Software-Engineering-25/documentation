@@ -3,17 +3,17 @@ sidebar_position: 1
 title: Springboot Example
 ---
 
-# Spring Boot template (annotated)
+# Spring Boot template
 
 These manifests deploy a Spring Boot service behind Traefik using Kustomize. This assumes your spring boot application is listening on port 8080.
 
 > Replace placeholders like `<service-name>`, `<team-namespace>`, `<deployment-path>`, `<image>` with your values. No angle bracket should be left in the final files.
 
-You need to copy these files into your repo, under `k8s`.
+> You need to copy these files into your repo, under `k8s`.
 
 ---
 
-## `kustomization.yaml` (overview)
+## `kustomization.yaml`
 
 ```yaml title="kustomization.yaml"
 apiVersion: kustomize.config.k8s.io/v1beta1
