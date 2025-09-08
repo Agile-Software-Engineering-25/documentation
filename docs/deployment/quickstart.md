@@ -30,7 +30,7 @@ In most scenarios, running a single pod is enough for your service.
     The configuration again depends on your application. Have a look into the examples or create on your own.
 
    :::tip
-   Your image will be stored in the ghcr of the `Agile-Software-Engineering-25` organization. You will your image under: `ghcr.io/agile-software-engineering-25/<repo-name>:latest` (replace `<repo-name>` with the name of your repository).
+   Your image will be stored in the ghcr of the `Agile-Software-Engineering-25` organization. You will reach your image under: `ghcr.io/agile-software-engineering-25/<repo-name>:latest` (replace `<repo-name>` with the name of your repository).
 
    After you first run the `build-and-publish-image` workflow on your repository, you will find your published images under packages on the start page of your repository.
    :::
