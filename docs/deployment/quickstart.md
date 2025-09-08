@@ -29,6 +29,12 @@ In most scenarios, running a single pod is enough for your service.
 5. Create a kustomize configuration in a `k8s` directory in the root of your project  
     The configuration again depends on your application. Have a look into the examples or create on your own.
 
+   :::tip
+   Your image will be stored in the ghcr of the `Agile-Software-Engineering-25` organization. You will reach your image under: `ghcr.io/agile-software-engineering-25/<repo-name>:latest` (replace `<repo-name>` with the name of your repository).
+
+   After you first run the `build-and-publish-image` workflow on your repository, you will find your published images under packages on the start page of your repository.
+   :::
+
    :::caution
    If you want to add a ingress to your configuration to make the application accessible over the internet you will need to set the ingress path to `/ase-<YOUR-TEAMNUMBER>/<SERVICE-NAME>/` and add tls configuration on your own. (Might now even work currently) The ingress base path for each team will and tls configuration will be set automatically in the future.
    :::
@@ -51,7 +57,9 @@ jobs:
 
       - name: Upload image
         uses: Agile-Software-Engineering-25/build-and-publish-image@v1
-        
+        with:
+          push: true
+
       - name: Deploy to Namespace
         uses: Agile-Software-Engineering-25/deploy-to-k8s@v1
         with:
