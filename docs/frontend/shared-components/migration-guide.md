@@ -6,7 +6,7 @@ sidebar_custom_props:
 
 # Migration Guide
 
-This page contains migrations guide for every new major version of shared-components.
+This page contains migrations guides for every new major version of shared-components.
 
 ## v2.0.0
 
