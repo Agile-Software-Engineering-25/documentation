@@ -23,7 +23,8 @@ To make this work, you might need to add the following plugin to your `pom.xml` 
                     <archive>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <mainClass>com.ase.my-service.Application</mainClass> # Change to your main class
+                            <!-- Change to your main class -->
+                            <mainClass>com.ase.my-service.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
