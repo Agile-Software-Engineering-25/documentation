@@ -48,7 +48,7 @@ function App() {
     <ThemeProvider theme={{ [MATERIAL_THEME_ID]: muiTheme }}>
       <JoyCssVarsProvider
         theme={joyTheme}
-        defaultMode="system"
+        defaultMode="light"
         modeStorageKey="joy-mode"
         colorSchemeStorageKey="joy-color-scheme"
       >
