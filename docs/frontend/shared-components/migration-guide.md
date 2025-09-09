@@ -12,7 +12,7 @@ This page contains migrations guides for every new major version of shared-compo
 
 `createCustomTheme` was split into `createCustomJoyTheme` and `createCustomMuiTheme`.
 
-You need to create separate themes for Mui and Joy. Simply call `createCustomJoyTheme` and `createCustomMuiTheme` (and pass custom themes to override the current one) and pass them to the Mui and Joy Providers.
+You need to create separate themes for Mui and Joy. Simply call `createCustomJoyTheme` and `createCustomMuiTheme` and pass them to the Mui and Joy Providers.
 
 ### Pre v2.0.0
 
