@@ -12,7 +12,7 @@ This page contains migrations guides for every new major version of shared-compo
 
 `createCustomTheme` was split into `createCustomJoyTheme` and `createCustomMuiTheme`.
 
-You need to create separate themes for Mui and Joy. Simply call `createCustomJoyTheme` and `createCustomMuiTheme` (and pass custom themes to override the current one) and pass them to the Mui and Joy Providers.
+You need to create separate themes for Mui and Joy. Simply call `createCustomJoyTheme` and `createCustomMuiTheme` and pass them to the Mui and Joy Providers.
 
 ### Pre v2.0.0
 
@@ -48,7 +48,7 @@ function App() {
     <ThemeProvider theme={{ [MATERIAL_THEME_ID]: muiTheme }}>
       <JoyCssVarsProvider
         theme={joyTheme}
-        defaultMode="system"
+        defaultMode="light"
         modeStorageKey="joy-mode"
         colorSchemeStorageKey="joy-color-scheme"
       >
@@ -56,5 +56,36 @@ function App() {
       <JoyCssVarsProvider />
     <ThemeProvider />
   );
+}
+```
+
+### Type Declaration Updates
+
+Along with the function changes, you'll need to update your type declarations in `src/@types/agile-shared-components.d.ts`:
+
+#### Pre v2.0.0
+
+```ts title="src/@types/agile-shared-components.d.ts"
+declare module '@agile-software/shared-components' {
+  export const createCustomTheme: (config: Record<string, unknown>) =>
+    | { $$joy: Record<string, unknown> }
+    | {
+        cssVarPrefix?: string;
+        colorSchemes: Record<string, Record<string, unknown>>;
+      };
+}
+```
+
+#### After v2.0.0
+
+```ts title="src/@types/agile-shared-components.d.ts"
+declare module '@agile-software/shared-components' {
+  import { extendTheme } from '@mui/joy/styles';
+  import { Theme } from '@mui/material/styles';
+
+  export type CustomTheme = ReturnType<typeof extendTheme>;
+
+  export function createCustomJoyTheme(): CustomTheme;
+  export function createCustomMuiTheme(): Theme;
 }
 ```
