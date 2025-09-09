@@ -58,3 +58,34 @@ function App() {
   );
 }
 ```
+
+### Type Declaration Updates
+
+Along with the function changes, you'll need to update your type declarations in `src/@types/agile-shared-components.d.ts`:
+
+#### Pre v2.0.0
+
+```ts title="src/@types/agile-shared-components.d.ts"
+declare module '@agile-software/shared-components' {
+  export const createCustomTheme: (config: Record<string, unknown>) =>
+    | { $$joy: Record<string, unknown> }
+    | {
+        cssVarPrefix?: string;
+        colorSchemes: Record<string, Record<string, unknown>>;
+      };
+}
+```
+
+#### After v2.0.0
+
+```ts title="src/@types/agile-shared-components.d.ts"
+declare module '@agile-software/shared-components' {
+  import { extendTheme } from '@mui/joy/styles';
+  import { Theme } from '@mui/material/styles';
+
+  export type CustomTheme = ReturnType<typeof extendTheme>;
+
+  export function createCustomJoyTheme(): CustomTheme;
+  export function createCustomMuiTheme(): Theme;
+}
+```
