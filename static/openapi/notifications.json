@@ -96,30 +96,41 @@
         "type": "object",
         "required": [
           "title",
-          "recipients",
           "message"
         ],
         "properties": {
-          "priority": {
-            "type": "boolean",
-            "default": false,
-            "description": "Priority of the notification"
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "List of user UUIDs to receive the notification"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "List of group UUIDs to receive the notification"
           },
           "title": {
             "type": "string",
             "description": "Title of the notification"
           },
-          "recipients": {
-            "type": "string (UUID)",
-            "description": "Recipients of the notification"
+          "message": {
+            "type": "string",
+            "description": "The notification message"
+          },
+          "priority": {
+            "type": "boolean",
+            "default": false,
+            "description": "Priority of the notification"
           },
           "shortDescription": {
             "type": "string",
             "description": "Short description of the notification"
-          },
-          "message": {
-            "type": "string",
-            "description": "The notification message"
           }
         }
       },
