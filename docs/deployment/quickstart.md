@@ -6,7 +6,7 @@ title: Quickstart
 ## Deploy your service
 
 :::warning
-If you want to deploy your frontend see the [Microfrontend Deployment Guide](frontend/intro)
+If you want to deploy your frontend see the [Microfrontend Deployment Guide](frontend/intro). This quickstart is meant to be used to deploy a micro service.
 :::
 
 :::tip
