@@ -6,7 +6,7 @@ title: Quickstart
 ## Deploy your service
 
 :::warning
-Please constraint from deploying a frontend
+If you want to deploy your frontend see the [Microfrontend Deployment Guide](frontend/intro). This quickstart is meant to be used to deploy a microservice.
 :::
 
 :::tip
@@ -35,8 +35,10 @@ In most scenarios, running a single pod is enough for your service.
    After you first run the `build-and-publish-image` workflow on your repository, you will find your published images under packages on the start page of your repository.
    :::
 
-   :::caution
-   If you want to add a ingress to your configuration to make the application accessible over the internet you will need to set the ingress path to `/ase-<YOUR-TEAMNUMBER>/<SERVICE-NAME>/` and add tls configuration on your own. (Might now even work currently) The ingress base path for each team will and tls configuration will be set automatically in the future.
+   :::note
+   If you want to add a ingress to your configuration to make the application accessible over the internet you can use any ingress path you like. You will get an error if the path is already taken.
+
+   If you are in doubt which ingress path to use you can contact Team 15.
    :::
 
 6. Create a `.github/workflows` directory in the root of your project
