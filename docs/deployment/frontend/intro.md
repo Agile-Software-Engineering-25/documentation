@@ -20,8 +20,83 @@ Your task is straightforward:
 We’ve prepared a **MinIO server** and a **bucket** specifically for this purpose.  
 Below is a ready-to-use **GitHub Actions workflow** that:
 
+0. Configure your frontend
 1. Builds your application (`npm run build`)
 2. Uploads the build artifacts to your MinIO bucket
+
+---
+
+## 🔧 Configure your vite frontend 
+### Base URL
+Inside your vite.config.js file, you should have this line: (around line 16)
+
+```ts
+  base: command === "serve" ? "/" : BASE_URL_DEPLOYMENT
+```
+
+Here you need to define your deployment base URL, for this you can just replace the variable in the end with
+`/api/ASE-[YOUR-TEAM-NUMBER]/`.
+
+For your build to succeed, you also need to remove the variable `BASE_URL_DEPLOYMENT` from the `vite.config.ts` file. (as the typescript build is quite picky)
+
+### External libraries:
+
+In line 12, you should have something like this:
+
+`const NPM_EXTERNALS: string[] = ["react", "react-dom"];`
+
+This defines the external libraries that are not bundled into the application, at the moment we have some issues with the external libraries, so we need to add them into every build for now. 
+This means you can just clear the array for now.
+This should leave you with something like this:
+
+`const NPM_EXTERNALS: string[] = [];`
+
+In the end it should look like this:
+```ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+import vitePluginSingleSpa from "vite-plugin-single-spa";
+import vitePluginReactHMR from "vite-plugin-react-single-spa-hmr";
+
+const PORT = parseInt(process.env.PORT ?? "5173");
+
+const ENTRY_POINT = "src/singleSpa.tsx";
+
+const NPM_EXTERNALS: string[] = [];
+
+// https://vite.dev/config/
+export default defineConfig(({ command }) => ({
+  base: command === "serve" ? "/" : "/api/ASE-12/",
+  plugins: [
+    react(),
+    command === "serve" && vitePluginReactHMR(ENTRY_POINT),
+    vitePluginSingleSpa({
+      type: "mife",
+      serverPort: PORT,
+      spaEntryPoints: ENTRY_POINT,
+    }),
+  ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+      "@components": path.resolve(__dirname, "./src/components"),
+      "@pages": path.resolve(__dirname, "./src/pages"),
+      "@utils": path.resolve(__dirname, "./src/utils"),
+      "@custom-types": path.resolve(__dirname, "./src/@custom-types"),
+      "@hooks": path.resolve(__dirname, "./src/hooks"),
+      "@assets": path.resolve(__dirname, "./src/assets"),
+      "@stores": path.resolve(__dirname, "./src/stores"),
+    },
+  },
+  build: {
+    rollupOptions: {
+      external: [...NPM_EXTERNALS],
+    },
+  },
+}));
+```
+
 
 ---
 
@@ -34,7 +109,7 @@ name: Build and Deploy to MinIO
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   workflow_dispatch: # Allow manual triggering
 
 jobs:
@@ -111,7 +186,7 @@ jobs:
 ## 🔑 Required Repository Secrets
 
 | Secret Name             | Description                                                                                                |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------- |
+|-------------------------|------------------------------------------------------------------------------------------------------------|
 | `MINIO_ENDPOINT`        | MinIO server endpoint (e.g. `https://minio.sau-portal.de`)                                                 |
 | `MINIO_ACCESS_KEY`      | Access key (username) for MinIO                                                                            |
 | `MINIO_SECRET_KEY`      | Secret key (password) for MinIO                                                                            |
@@ -127,7 +202,7 @@ If you want the workflow to run for **every branch push**, update this section:
 ```yaml
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   workflow_dispatch:
 ```
 
@@ -136,7 +211,7 @@ on:
 ```yaml
 on:
   push:
-    branches: ["**"]
+    branches: [ "**" ]
   workflow_dispatch:
 ```
 
