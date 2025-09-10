@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://sau-portal.de/notification-service",
+      "url": "https://sau-portal.de",
       "description": "Production server (deployment only with authentication!)"
     }
   ],
@@ -17,7 +17,7 @@
     }
   ],
   "paths": {
-    "/notifications": {
+    "/notification-service": {
       "post": {
         "summary": "Send notification",
         "description": "Sends a notification to one or more users or to a user group. Requires a valid JWT Bearer Token.",
