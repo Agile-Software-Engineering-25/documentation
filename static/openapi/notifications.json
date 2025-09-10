@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://sau-portal.de/ase-15/notification-service",
+      "url": "https://sau-portal.de/notification-service",
       "description": "Production server (deployment only with authentication!)"
     }
   ],
