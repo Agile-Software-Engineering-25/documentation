@@ -6,7 +6,7 @@ title: Quickstart
 ## Deploy your service
 
 :::warning
-Please constraint from deploying a frontend
+If you want to deploy your frontend see the [Microfrontend Deployment Guide](frontend/intro)
 :::
 
 :::tip
