@@ -34,8 +34,8 @@ The user creation process is managed by different F3 teams (please also take a l
   - **Consumes:**
     - First name & last name
     - E-mail address
-- **Group assignment** - handled by *Team-8*
-  - **Contact person:** Ole Leister
+- **Group assignment** - handled by *Team-10 "HAriBO"*
+  - **Contact person:** Luca Schmitz
   - Groups can be *HVS-Admin*, *Hochschulverwaltungsmitarbeiter*, *Dozent*, *Student*, or custom groups that inherit permissions from one of these base groups.
   - **Consumes:**  
     - Selected group to assign to the user
@@ -64,7 +64,7 @@ After successful authentication in Keycloak, the user is redirected back to the 
 In reality, a number of additional steps take place under the hood. If you are interested in the details, please refer to the [**OAuth 2.0 Authorization Code Flow with PKCE Docs**](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce).
 
 After a successful login, the access JWT will automatically be added as a header to all requests made through Axios.  
-This means you don’t have to handle authentication against your backend manually.  
+This means you don’t have to handle authentication against your backend manually. (⚠️ This functionality is still **WiP**!)  
 
 On the backend side, the JWT attached to incoming requests will be validated by the middleware/filter in the Spring Boot application (more details can be found in the next section).  
 All you need to do is define which endpoints require which roles (please take a look at the [Role Creation](auth-overview#request-role-creation) section), allowing us to establish a fine‑grained access control structure.
@@ -107,7 +107,7 @@ This information includes:
 - User roles  
 
 ### Backend integration
-To make this data easily accessible, standard interfaces will be provided.  
+To make this data easily accessible, standard interfaces will be provided. (⚠️ This functionality is still **WiP**!)  
 
 For teams working with **Spring Boot**, this functionality will be directly integrated into the official template repository in our GitHub organization, which already serves as the foundation for many projects. The template will come with:  
 - **JWT validation**  
@@ -123,14 +123,33 @@ For teams working with **other backend technologies** (e.g., Python, Go, Node.js
 
 ### Frontend integration
 Similar interfaces are also being developed in the **frontend-template** repository to enable consistent access to the same user information in the client applications.  
+These interfaces are already merged into the `root-ui` and `frontend-template` repos and can be used via the **useUser-Hook**.  
+
+⚠️ Login is handled **only in the root-ui** repo, not in microfrontends (e.g., frontend-template). Microfrontends receive the user object from root-ui. To test frontend access to user data, start root-ui and integrate your microfrontend as shown in the frontend-template example.
+
+`useUser` is a custom React hook that provides access to a **global user state** (OIDC user), keeps it in sync across components, and exposes helper functions like `getFullName()`, `getEmail()`, or `hasRole(role)`.
+
+**How to use:**  
+```tsx
+import useUser from '@/hooks/useUser';
+
+const MyComponent = () => {
+  const user = useUser(); // get access at the top of your component
+
+  console.log(user.getFullName()); // Full name
+  console.log(user.getEmail());    // Email
+  console.log(user.hasRole("admin")); // Check role
+};
+```
 
 ⚠️ As a reminder: information provided by the **frontend must never be trusted** without proper validation on the backend.  
 
 ### Planned interfaces
 To give an impression of how access will look, here is a simplified overview of the planned methods. Please note that the real implementation will take the conventions of the underlying language and framework into account (e.g. React for frontend, Spring Boot for backend):  
 - `getUserID() -> string`  
-- `getFirstname() -> string`  
-- `getLastname() -> string`  
+- `getFirstName() -> string`  
+- `getLastName() -> string`  
+- `getFullName() -> string`  
 - `getEmail() -> string`  
 - `hasRole(roleName: string) -> boolean`  
 
@@ -140,18 +159,19 @@ To give an impression of how access will look, here is a simplified overview of 
 In addition to the user information obtained via JWT parsing (in the frontend-template and the Spring Boot microservice), the F3 teams provide further data and functionality through dedicated APIs. These APIs allow services to query information about accounts, groups, user master data, and course master data.
 
 ### Account information - Team-10 "HAriBO"
+(⚠️ This functionality is still **WiP**!)  
 Beyond the data of the currently logged-in user (user ID, first name, last name, e‑mail, roles), Team‑10 will provide API endpoints to:  
 - Retrieve account details for a specific user by their user ID  
 - Retrieve a complete list of all users  
 
-**API definition:** Coming soon  
+**API definition:** [Swagger](./team10-api.md)  
 **Contact person:** Luca Schmitz
 
 ### Group management - Team-8
 APIs from Team‑8 will provide information on:  
 - Determining the group(s) a user belongs to by their user ID  
 
-**API definition:** Coming soon  
+**API definition:** [Swagger](./team8-api.md)  
 **Contact person:** Ole Leister
 
 ### User Master Data - Team-11
@@ -162,7 +182,7 @@ APIs from Team‑11 allow access to extended user master data:
 - Search and filter for users based on field values or ranges, returning matching user IDs.  
   - These IDs could then be used to call the Team‑10 API in order to fetch additional account information (e.g. names).  
 
-**API definition:** Coming soon  
+**API definition:** [Swagger](./team11-api.md)  
 **Contact person:** Carlo Bockermann
 
 ### Course Master Data - Team-9
@@ -173,12 +193,13 @@ Team‑9 provides APIs for course-related structures:
 - Retrieve which modules belong to which study program(s)
 - Retrieve which courses belong to a specific module
 
-**API definition:** Coming soon  
+**API definition:** [Swagger](./team9-api.md)  
 **Contact person:** Patricia Schiewald
 
 ---
 
 ## User deletion
+(⚠️ This functionality is still **WiP**!)  
 If your team requires functionality to delete a user account (for example, giving users the option to permanently remove their account for privacy reasons, or in other specific use cases), please contact **Team-10 "HAriBO"**.  
 **Contact person:** Luca Schmitz  
 
