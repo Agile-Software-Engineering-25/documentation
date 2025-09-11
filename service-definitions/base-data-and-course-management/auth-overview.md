@@ -130,6 +130,9 @@ These interfaces are already merged into the `root-ui` and `frontend-template` r
 `useUser` is a custom React hook that provides access to a **global user state** (OIDC user), keeps it in sync across components, and exposes helper functions like `getFullName()`, `getEmail()`, or `hasRole(role)`.
 
 **How to use:**  
+
+> **Note:** The import path `@/hooks/useUser` assumes your project is configured with the `@` path alias (e.g., in your build tool or `tsconfig.json`).  
+> If you do not have this alias configured, use a relative import path instead, such as `../../hooks/useUser`.
 ```tsx
 import useUser from '@/hooks/useUser';
 
