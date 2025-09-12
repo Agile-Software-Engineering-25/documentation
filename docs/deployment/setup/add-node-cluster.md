@@ -24,7 +24,7 @@ Ask Alexander Jablonowski for this
 
 5. Add the server to the cluster
 
-Replace `<K3S_Token>` with the `K3S_TOKEN` from the last step and `<server-node-public-ip>` with the static, public IP of your server.
+Replace `<K3S_Token>` with the `K3S_TOKEN` from the last step,`<server-node-public-ip>` with the IP of the server node and `<agent-public-ip>` with the static, public IP of your server.
 
 ```bash
 curl -sfL https://get.k3s.io | \
