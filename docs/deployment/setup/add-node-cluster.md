@@ -29,7 +29,7 @@ Replace `<K3S_Token>` with the `K3S_TOKEN` from the last step,`<server-node-publ
 ```bash
 curl -sfL https://get.k3s.io | \
 K3S_TOKEN=<K3S_Token>
-INSTALL_K3S_VERSION=1.32 \
+INSTALL_K3S_VERSION=v1.32.7+k3s1 \
 sh -s - \
     agent \
   --server https://<server-node-public-ip>:6443 \
