@@ -18,11 +18,11 @@ This explains how you can add a new agent node to our k3s cluster.
 
 On Ubuntu: `sudo apt install wireguard`
 
-5. Get the `K3S_TOKEN`
+4. Get the `K3S_TOKEN`
 
 Ask Alexander Jablonowski for this
 
-6. Add the server to the cluster
+5. Add the server to the cluster
 
 Replace `<K3S_Token>` with the `K3S_TOKEN` from the last step and `<server-node-public-ip>` with the static, public IP of your server.
 
