@@ -32,6 +32,12 @@ const apiDefinitions: ApiDefinition[] = [
     path: 'timetable-planning-and-resource-management/room-management',
     showInNav: false,
     yamlSpec: true,
+  },
+  {
+    name: 'dms_api',
+    label: 'DMS API',
+    path: 'communication-and-document-management/Team-7-DMS/dms-api',
+    showInNav: false,
   }
   // {
   //   name: 'api-name',
