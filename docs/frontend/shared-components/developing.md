@@ -12,8 +12,6 @@ This is a step-by-step guide if you need to change some components or add new on
 
 ## 1. Setup shared-components
 
-It is not possible (or not intended) to make commits on the submodule in your frontend project. For that reason you need to clone the library locally.
-
 1. `git clone https://github.com/Agile-Software-Engineering-25/shared-components.git`
 2. Create a new branch on github
 3. `git checkout feature/add-new-component` change this to your branch
@@ -38,10 +36,7 @@ Before you start working, review the README of the shared-components library to 
 
 ## 3. Feature developing is done
 
-When you are done working on shared-components you can simply replace the path of `@agile-software/shared-components` inside the `package.json` back to `2.*.*`.
-
-To update the version of the shared-components submodule execute:
-`npm run updateSharedComponents`.
+When you are done working on shared-components you can simply replace the path of `@agile-software/shared-components` inside the `package.json` back to `2.*.*` and open an PR on the shared-components repository. If the PR was merged your changes will be available with the next weekly release.
 
 ## Support
 
