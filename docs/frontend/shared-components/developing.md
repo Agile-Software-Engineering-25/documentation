@@ -7,6 +7,7 @@ sidebar_custom_props:
 # Contribute to the shared-components
 
 This is a step-by-step guide if you need to change some components or add new ones from the shared-components library.
+
 > 💡 If you have **not already requested a new component**, please first follow the [Request a new shared component](./request-shared-component.md) guide before starting development.
 
 ## 1. Setup shared-components
@@ -27,7 +28,7 @@ This assumes you already did the first time setup of the frontend project.
 
 `git checkout -b feature/update-shared-components`
 
-2. Inside the `package.json` replace `./shared-components` in the dependency of `@agile-software/shared-components` with the path to the shared-components project you just cloned.
+2. Inside the `package.json` replace `2.*.*` in the dependency of `@agile-software/shared-components` with the path to the shared-components project you just cloned.
 3. `npm i`
 4. `npm run dev`
 
@@ -37,7 +38,7 @@ Before you start working, review the README of the shared-components library to 
 
 ## 3. Feature developing is done
 
-When you are done working on shared-components you can simply replace the path of `@agile-software/shared-components` inside the `package.json` back to `./shared-components`.
+When you are done working on shared-components you can simply replace the path of `@agile-software/shared-components` inside the `package.json` back to `2.*.*`.
 
 To update the version of the shared-components submodule execute:
 `npm run updateSharedComponents`.
