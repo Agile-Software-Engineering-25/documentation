@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
-title: Team 7 – API
+sidebar_position: 3
+title: Team 7 – Static API
 ---
 # DMS API
