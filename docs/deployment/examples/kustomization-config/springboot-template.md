@@ -129,7 +129,7 @@ spec:
             httpGet:
               path: <deployment-path> # you might need to change this to a health endpoint of your application
               port: 8080
-            initialDelaySeconds: 12
+            initialDelaySeconds: 120
             periodSeconds: 20
           env: # add environment variables here if needed
             - name: SOME_ENVIRONMENT_VARIABLE
