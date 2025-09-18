@@ -3,7 +3,7 @@ sidebar_position: 4
 title: Add new subdomain to cluster
 ---
 
-```yaml title="<domain>-certificate.yaml
+```yaml title="<domain>-certificate.yaml"
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -19,7 +19,7 @@ spec:
     kind: ClusterIssuer
 ```
 
-```yaml title="<domain>-shim-ingress.yaml
+```yaml title="<domain>-shim-ingress.yaml"
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
