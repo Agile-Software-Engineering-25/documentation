@@ -45,3 +45,22 @@ We noticed that pods on the `ecs-thor` node need more time to start. If your pod
 
 To see on which node your pod is running go to [rancher.sau-portal.de](https://rancher.sau-portal.de) -> Workload -> Deployment -> your application -> on the right side under "Node" is the node the pod is running on.
 ![Screenshot](/img/deployment/troubleshooting/see-pod-node.png)
+
+### My pod receives an 401 when pulling the image
+
+If you get a error message like this one:
+
+![Screenshot](/img/deployment/troubleshooting/401-image-pull-unauthorized.png)
+
+Check the visibility of your package.
+
+1. Go to the packages of your repository
+   ![Screenshot](/img/deployment/troubleshooting/change-package-visibility.png)
+2. check if your package is public
+   - if it is private go on with the steps, if not this can not help you
+3. Go to Package settings
+4. Scroll down to "Danger Zone"
+5. Change the visibility to "Public"
+   :::tip
+   if you don't want to change the visibility of your package get in contact with Team 15
+   :::
