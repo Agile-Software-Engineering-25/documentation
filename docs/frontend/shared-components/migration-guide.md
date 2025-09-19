@@ -25,7 +25,7 @@ set -e
 
 echo "Updating @agile-software/shared-components to v2.1.0 in package.json..."
 if grep -q '"@agile-software/shared-components":' package.json; then
-  sed -i.bak 's|"@agile-software/shared-components": *"[^"]*"|"@agile-software/shared-components": "v2.1.0"|' package.json
+  sed -i.bak 's|"@agile-software/shared-components": *"[^"]*"|"@agile-software/shared-components": "^2.1.0"|' package.json
   rm package.json.bak
   echo "Dependency updated."
 else
