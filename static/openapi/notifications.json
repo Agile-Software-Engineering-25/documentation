@@ -2,12 +2,12 @@
   "openapi": "3.1.1",
   "info": {
     "title": "Notification Microservice API",
-    "description": "Microservice for notifications – allows sending messages to users or user groups.\n\nAnyone who wants to use the message sending functionality in their service must have Team 10 add the role \"Area-4.Team-15.Write.SendNotification\" to their service. With this role, the service can obtain a JWT, which it then sends along with the request, allowing us to verify the permissions.",
+    "description": "Microservice for notifications – allows sending messages to users or user groups, and managing notification read status.\n\n**For sending notifications**: Services must have Team 10 add the role \"Area-4.Team-15.Write.SendNotification\" to their service. With this role, the service can obtain a JWT, which it then sends along with the request.\n\n**For managing notifications**: Users need the role \"Area-4.Team-15.Read.Notifications\" to mark their own notifications as read/unread. This role should be assigned to standard user groups (Student, Dozent, etc.) as needed.",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "https://sau-portal.de",
+      "url": "https://sau-portal.de/ase-15/notification-service",
       "description": "Production server (deployment only with authentication!)"
     }
   ],
@@ -17,10 +17,10 @@
     }
   ],
   "paths": {
-    "/notification-service": {
+    "/notifications": {
       "post": {
         "summary": "Send notification",
-        "description": "Sends a notification to one or more users or to a user group. Requires a valid JWT Bearer Token.",
+        "description": "Sends a notification to one or more users or to a user group. Requires a valid JWT Bearer Token with the role 'Area-4.Team-15.Write.SendNotification'. This endpoint is intended for service-to-service communication.",
         "operationId": "sendNotification",
         "security": [
           {
@@ -70,6 +70,154 @@
           },
           "403": {
             "description": "Forbidden – User not allowed to perform this action",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mark-as-read": {
+      "patch": {
+        "summary": "Mark notification as read",
+        "description": "Marks a specific notification as read for the authenticated user. Requires a valid JWT Bearer Token with the role 'Area-4.Team-15.Read.Notifications'. The user can only mark their own notifications as read.",
+        "operationId": "markNotificationAsRead",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarkNotificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Notification marked as read successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarkNotificationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – JWT is missing or invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden – User not allowed to mark this notification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Notification not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mark-as-unread": {
+      "patch": {
+        "summary": "Mark notification as unread",
+        "description": "Marks a specific notification as unread for the authenticated user. Requires a valid JWT Bearer Token with the role 'Area-4.Team-15.Read.Notifications'. The user can only mark their own notifications as unread.",
+        "operationId": "markNotificationAsUnread",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarkNotificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Notification marked as unread successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarkNotificationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – JWT is missing or invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden – User not allowed to mark this notification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Notification not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -157,6 +305,38 @@
           "details": {
             "type": "string",
             "description": "Detailed error description"
+          }
+        }
+      },
+      "MarkNotificationRequest": {
+        "type": "object",
+        "required": [
+          "notificationId"
+        ],
+        "properties": {
+          "notificationId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "UUID of the notification to mark as read/unread"
+          }
+        }
+      },
+      "MarkNotificationResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID of the notification"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["read", "unread"],
+            "description": "New status of the notification"
+          },
+          "message": {
+            "type": "string",
+            "description": "Success message"
           }
         }
       }
