@@ -33,9 +33,9 @@ For instructions on how to migrate, see the [Migration Guide](./migration-guide.
 
 There are dedicated subpages for contributing, requesting new components, and migration:
 
-- [Contributing](./developing.md)  
-- [Request a new shared component](./request-shared-component.md)  
-- [Migration Guide](./migration-guide.md)  
+- [Contributing](./developing.md)
+- [Request a new shared component](./request-shared-component.md)
+- [Migration Guide](./migration-guide.md)
 
 ## Installation & Usage
 
@@ -49,6 +49,7 @@ For setup details and usage examples, see the Shared Components [README](https:/
 
 ## Support & Maintainers
 
-If you encounter any problems reach out to:  
-- **Alexander Jablonowski**  
+If you encounter any problems reach out to:
+
+- **Alexander Jablonowski**
 - **Simon Dietrich**
