@@ -10,10 +10,14 @@ This page contains migrations guides for every new major version of shared-compo
 
 ## v2.1.0
 
-With the version 2.1.0 shared components migrates to publishing npm packages. Using git submodules can still work but will not be supported.
+With the version 2.1.0 shared components migrates to publishing npm packages. Using git submodules probably still works but will not be supported.
 Starting with this version you can install and import shared-components just like every other npm package.
 
 To migrate execute the following script in your frontend repository:
+
+:::warning
+You also need to remove the `npm run init` command from all workflow runs.
+:::
 
 :::warning
 This script will remove your `.submodules` file, the `scripts` and `shared-components` directories (recursively!), update the `shared-components` dependency and will stage everything. Check if nothing went wrong before committing!
@@ -30,6 +34,15 @@ if grep -q '"@agile-software/shared-components":' package.json; then
   echo "Dependency updated."
 else
   echo "Dependency @agile-software/shared-components not found in package.json."
+fi
+
+echo "Removing 'init' script from package.json..."
+if grep -q '"init":' package.json; then
+  sed -i.bak '/"init":/d' package.json
+  rm package.json.bak
+  echo "'init' script removed."
+else
+  echo "No 'init' script found in package.json."
 fi
 
 echo "Removing local shared_components directory..."
