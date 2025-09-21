@@ -25,6 +25,9 @@ This script will remove your `.submodules` file, the `scripts` and `shared-compo
 
 ```bash title="migration.sh"
 #!/bin/bash
+# Migration script for shared-components v2.1.0
+# ⚠️ Must be executed in Git Bash on Windows
+
 set -e
 
 echo "Updating @agile-software/shared-components to v2.1.0 in package.json..."
@@ -45,23 +48,31 @@ else
   echo "No 'init' script found in package.json."
 fi
 
-echo "Removing local shared_components directory..."
-git config -f .gitmodules --remove-section submodule.shared-components
-git config -f .git/config --remove-section submodule.shared-components
+echo "Removing local shared-components directory..."
+git config -f .gitmodules --remove-section submodule.shared-components || true
+git config -f .git/config --remove-section submodule.shared-components || true
 git stage .
-git rm --cached shared-components
+git rm --cached shared-components || true
 rm -rf shared-components
 
 echo "Removing .gitmodules file..."
-rm .gitmodules
+rm -f .gitmodules
 
 echo "Removing script directory..."
-rm -r scripts
+rm -rf scripts
+
+echo "Removing src/@types/agile-shared-components.d.ts if it exists..."
+if [ -f "src/@types/agile-shared-components.d.ts" ]; then
+  rm "src/@types/agile-shared-components.d.ts"
+  echo "File deleted."
+else
+  echo "File not found, skipping."
+fi
 
 echo "Staging changes..."
 git stage .
 
-echo "Done."
+echo "Done. ✅"
 ```
 
 ## v2.0.0
