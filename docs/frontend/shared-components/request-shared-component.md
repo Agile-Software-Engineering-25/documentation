@@ -9,6 +9,13 @@ sidebar_custom_props:
 All new shared components should be requested via our shared form.  
 This ensures a consistent process across all teams and makes sure every request is tracked in one place.
 
+:::error
+🚨 **Request Freeze as of 21.09.2025**  
+
+As of **September 21, 2025**, **no new shared-component requests** can be submitted.  
+For urgent matters, please contact **Simon Dietrich** (Form / Automation) or **Alexander Jablonowski** (Board Admin) directly.
+:::
+
 ## Process Overview
 
 1. **Submit a request**  
