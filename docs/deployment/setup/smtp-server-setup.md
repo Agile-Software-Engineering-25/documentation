@@ -5,6 +5,8 @@ title: SMTP Server Setup
 
 # DNS Setup
 
+WIP
+
 ## jablonowski.dev
 
 - A: 164.30.69.174

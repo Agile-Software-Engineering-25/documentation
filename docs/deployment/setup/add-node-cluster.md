@@ -9,6 +9,10 @@ This explains how you can add a new agent node to our k3s cluster.
 
 1. Setup the Server
 
+:::tip
+ssh access is recommended and the disk space should not be to small (to small means 8GB is not enough (we don't know what the minimum is))
+:::
+
 2. Open the following ports in your firewall:
 
    - UDP 8472, 51820, 51821
