@@ -72,7 +72,53 @@ All you need to do is define which endpoints require which roles (please take a 
 ---
 
 ## How to secure actions to be only allowed for users with a specific role?
+### Backend
+For **Spring Boot** projects, role-based endpoint security is already integrated into the official backend template. The template provides JWT validation middleware and role-based access control.
 
+For implementation details and configuration examples, please refer to the [security configuration in the backend template](https://github.com/Agile-Software-Engineering-25/backend-template-java/blob/main/src/main/java/com/ase/userservice/security/SecurityConfig.java).
+
+Teams using other backend technologies must implement JWT validation and role checking independently.
+
+**Note:** More detailed backend implementation documentation will be available soon.
+
+### Frontend
+To implement role-based access control in your frontend components, use the `hasRole()` function from the `useUser` hook:
+
+```tsx
+import useUser from '@/hooks/useUser';
+
+const MyComponent = () => {
+  const user = useUser();
+
+  // Check for specific role access
+  if (!user.hasRole("Area-3.Team-09.Read.Stundenplan")) {
+    return <div>Access denied - insufficient permissions</div>;
+  }
+
+  // Conditional rendering based on roles
+  return (
+    <div>
+      <h1>Timetable View</h1>
+      
+      {user.hasRole("Area-3.Team-09.Write.Stundenplan") && (
+        <button>Edit Timetable</button>
+      )}
+      
+      {user.hasRole("HVS-Admin") && (
+        <AdminPanel />
+      )}
+    </div>
+  );
+};
+```
+
+**Best practices:**
+- Always check roles before rendering sensitive UI elements
+- Use descriptive error messages for unauthorized access
+- Combine role checks with conditional rendering for dynamic interfaces
+- Remember: Frontend role checks are for UX only - always validate permissions on the backend
+
+For more details on the `useUser` hook, see the [frontend integration section](auth-overview#frontend-integration).
 
 ---
 
