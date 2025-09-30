@@ -155,7 +155,7 @@ In this form, you will be asked to provide all necessary details so that we can 
 👉 Please already start considering which roles your service may require and to which standard groups they should belong (one or multiple of: `HVS-Admin`, `Hochschulverwaltungsmitarbeiter`, `Dozent`, `Student`).
 
 **Documentation and Request Form:**  
-For detailed instructions on role creation and access to the request form, please refer to our [role request documentation](./team10-requesting-roles.md).  
+For detailed instructions on role creation and access to the request form, please refer to our [role request documentation](./team10-docs-requesting-roles).  
 If you're already familiar with the process, you can directly access the [role request form](https://forms.office.com/pages/responsepage.aspx?id=2Uu2W3K4MUGX34oDJ9ihSLtU7JRVS5VLizM3es16HI9UNTBLVUI1WkhFTVY5U1o4RlRCQzVOMkY0Qy4u&route=shorturl).
 
 To verify whether a user has a specific role, please refer to the [previous section](auth-overview#how-to-secure-actions-to-be-only-allowed-for-users-with-a-specific-role).
