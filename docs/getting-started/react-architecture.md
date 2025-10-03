@@ -94,4 +94,4 @@ An example for a React application with everything set up will follow.
 
 ### Design components
 
-We will use custom design repo as submodule for main project repo
+[shared-components](https://github.com/Agile-Software-Engineering-25/shared-components) is used as a component library for SAU. It provides a custom theme to achieve a uniform look for the application and provides components that can be used by every team in the SAU project.
