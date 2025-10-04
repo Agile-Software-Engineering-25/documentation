@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://sau-portal.de/ase-15/notification-service",
+      "url": "https://sau-portal.de/notification-service/api/v1",
       "description": "Production server (deployment only with authentication!)"
     }
   ],
@@ -17,7 +17,7 @@
     }
   ],
   "paths": {
-    "/api/v1/notifications": {
+    "/notifications": {
       "post": {
         "summary": "Send notification",
         "description": "Sends a notification to one or more users or to a user group. Requires a valid JWT Bearer Token.",
@@ -141,7 +141,7 @@
         }
       }
     },
-    "/api/v1/notifications/mark-as-read/{notificationId}": {
+    "/notifications/mark-as-read/{notificationId}": {
       "post": {
         "summary": "Mark notification as read",
         "description": "Marks a specific notification as read. Requires a valid JWT Bearer Token.",
@@ -208,7 +208,7 @@
         }
       }
     },
-    "/api/v1/notifications/mark-as-unread/{notificationId}": {
+    "/notifications/mark-as-unread/{notificationId}": {
       "post": {
         "summary": "Mark notification as unread",
         "description": "Marks a specific notification as unread. Requires a valid JWT Bearer Token.",
@@ -275,10 +275,10 @@
         }
       }
     },
-    "/api/v1/emails": {
+    "/emails": {
       "post": {
         "summary": "Send email",
-        "description": "Sends an email to one or more users. Requires a valid JWT Bearer Token.",
+        "description": "Sends an email to one or more users. Requires a valid JWT Bearer Token.\n\nNote: This endpoint should only be used when a notification cannot be created (e.g., when the recipient does not have an account yet). For standard use cases, creating a notification via the /notifications endpoint can automatically send an email to the user if configured.",
         "operationId": "sendEmail",
         "security": [
           {
@@ -391,10 +391,15 @@
             "type": "string",
             "description": "Short description of the notification"
           },
-          "notificationType": {
+          "notifyType": {
             "type": "string",
             "enum": ["Mail", "UI", "All"],
-            "description": "Type of notification delivery method"
+            "description": "Notification delivery method (Mail, UI, or All)"
+          },
+          "notificationType": {
+            "type": "string",
+            "enum": ["Info", "Warning", "Congratulation", "None"],
+            "description": "Visual representation of the notification in the frontend dropdown (determines which icon is displayed next to the notification). Additional types can be added upon request."
           }
         }
       },
@@ -427,9 +432,13 @@
             "type": "boolean",
             "description": "Priority flag of the notification"
           },
+          "notifyType": {
+            "type": "string",
+            "description": "Notification delivery method (Mail, UI, All)"
+          },
           "notificationType": {
             "type": "string",
-            "description": "Type of notification (Mail, UI, All)"
+            "description": "Visual display type (Info, Warning, Congratulation, None)"
           },
           "receivedAt": {
             "type": "string",
