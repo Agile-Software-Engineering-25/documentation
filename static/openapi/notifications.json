@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://sau-portal.de/ase-15/notification-service",
+      "url": "https://sau-portal.de/notification-service/api/v1",
       "description": "Production server (deployment only with authentication!)"
     }
   ],
@@ -274,6 +274,71 @@
           }
         }
       }
+    },
+    "/emails": {
+      "post": {
+        "summary": "Send email",
+        "description": "Sends an email to one or more users. Requires a valid JWT Bearer Token.\n\nNote: This endpoint should only be used when a notification cannot be created (e.g., when the recipient does not have an account yet). For standard use cases, creating a notification via the /notifications endpoint can automatically send an email to the user if configured.",
+        "operationId": "sendEmail",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Email sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Email sent successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – JWT is missing or invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden – User not allowed to perform this action",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -326,10 +391,15 @@
             "type": "string",
             "description": "Short description of the notification"
           },
-          "notificationType": {
+          "notifyType": {
             "type": "string",
             "enum": ["Mail", "UI", "All"],
-            "description": "Type of notification delivery method"
+            "description": "Notification delivery method (Mail, UI, or All)"
+          },
+          "notificationType": {
+            "type": "string",
+            "enum": ["Info", "Warning", "Congratulation", "None"],
+            "description": "Visual representation of the notification in the frontend dropdown (determines which icon is displayed next to the notification). Additional types can be added upon request."
           }
         }
       },
@@ -362,14 +432,50 @@
             "type": "boolean",
             "description": "Priority flag of the notification"
           },
+          "notifyType": {
+            "type": "string",
+            "description": "Notification delivery method (Mail, UI, All)"
+          },
           "notificationType": {
             "type": "string",
-            "description": "Type of notification (Mail, UI, All)"
+            "description": "Visual display type (Info, Warning, Congratulation, None)"
           },
           "receivedAt": {
             "type": "string",
             "format": "date-time",
             "description": "Timestamp when the notification was received"
+          },
+          "readAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp when the notification was read (null if unread)"
+          }
+        }
+      },
+      "EmailRequest": {
+        "type": "object",
+        "required": [
+          "to",
+          "subject",
+          "body"
+        ],
+        "properties": {
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "email"
+            },
+            "description": "List of email addresses to send the email to"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Email subject"
+          },
+          "body": {
+            "type": "string",
+            "description": "Email body content"
           },
           "readAt": {
             "type": "string",
