@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://sau-portal.de/ase-15/notification-service",
+      "url": "https://sau-portal.de/notification-service/api/v1",
       "description": "Production server (deployment only with authentication!)"
     }
   ],
@@ -43,7 +43,266 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NotificationResponse"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Notification"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – JWT is missing or invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden – User not allowed to perform this action",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get notifications for a user",
+        "description": "Retrieves all notifications for a specific user. Requires a valid JWT Bearer Token.",
+        "operationId": "getNotifications",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "description": "The UUID of the user to retrieve notifications for",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of notifications retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Notification"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – JWT is missing or invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden – User not allowed to perform this action",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/mark-as-read/{notificationId}": {
+      "post": {
+        "summary": "Mark notification as read",
+        "description": "Marks a specific notification as read. Requires a valid JWT Bearer Token.",
+        "operationId": "markNotificationAsRead",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "notificationId",
+            "in": "path",
+            "required": true,
+            "description": "The UUID of the notification to mark as read",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification marked as read successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Notification marked as read"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – JWT is missing or invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden – User not allowed to perform this action",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Notification not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/mark-as-unread/{notificationId}": {
+      "post": {
+        "summary": "Mark notification as unread",
+        "description": "Marks a specific notification as unread. Requires a valid JWT Bearer Token.",
+        "operationId": "markNotificationAsUnread",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "notificationId",
+            "in": "path",
+            "required": true,
+            "description": "The UUID of the notification to mark as unread",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification marked as unread successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Notification marked as unread"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – JWT is missing or invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden – User not allowed to perform this action",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Notification not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/emails": {
+      "post": {
+        "summary": "Send email",
+        "description": "Sends an email to one or more users. Requires a valid JWT Bearer Token.\n\nNote: This endpoint should only be used when a notification cannot be created (e.g., when the recipient does not have an account yet). For standard use cases, creating a notification via the /notifications endpoint can automatically send an email to the user if configured.",
+        "operationId": "sendEmail",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Email sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Email sent successfully"
                 }
               }
             }
@@ -131,19 +390,98 @@
           "shortDescription": {
             "type": "string",
             "description": "Short description of the notification"
+          },
+          "notifyType": {
+            "type": "string",
+            "enum": ["Mail", "UI", "All"],
+            "description": "Notification delivery method (Mail, UI, or All)"
+          },
+          "notificationType": {
+            "type": "string",
+            "enum": ["Info", "Warning", "Congratulation", "None"],
+            "description": "Visual representation of the notification in the frontend dropdown (determines which icon is displayed next to the notification). Additional types can be added upon request."
           }
         }
       },
-      "NotificationResponse": {
+      "Notification": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
-            "description": "ID of the sent notification"
+            "format": "uuid",
+            "description": "Unique identifier of the notification"
           },
-          "status": {
+          "userId": {
             "type": "string",
-            "description": "Status of the notification"
+            "format": "uuid",
+            "description": "UUID of the user who receives the notification"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the notification"
+          },
+          "message": {
+            "type": "string",
+            "description": "The notification message content"
+          },
+          "shortDescription": {
+            "type": "string",
+            "description": "Short description of the notification"
+          },
+          "priority": {
+            "type": "boolean",
+            "description": "Priority flag of the notification"
+          },
+          "notifyType": {
+            "type": "string",
+            "description": "Notification delivery method (Mail, UI, All)"
+          },
+          "notificationType": {
+            "type": "string",
+            "description": "Visual display type (Info, Warning, Congratulation, None)"
+          },
+          "receivedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the notification was received"
+          },
+          "readAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp when the notification was read (null if unread)"
+          }
+        }
+      },
+      "EmailRequest": {
+        "type": "object",
+        "required": [
+          "to",
+          "subject",
+          "body"
+        ],
+        "properties": {
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "email"
+            },
+            "description": "List of email addresses to send the email to"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Email subject"
+          },
+          "body": {
+            "type": "string",
+            "description": "Email body content"
+          },
+          "readAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp when the notification was read (null if unread)"
           }
         }
       },
