@@ -12,6 +12,7 @@ Empty application with the following fields:
 - `titel`: string
 - `erstprüfer`: dropdown of list
 - `startdate`: date
+- `expose`: file (PDF)
 
 #### POST
 Sends mail to Prüfungsamt for correcty submitted application.
