@@ -1,0 +1,18 @@
+# API
+
+## General Structure
+
+### `/bachelorarbeit`
+
+#### GET
+Empty application with the following fields:
+- `name` (filled out through jwt token)
+- `matrikelnummer` (filled out through jwt token)
+- `studiengang`: string
+- `titel`: string
+- `erstprüfer`: dropdown of list
+- `startdate`: date
+
+#### POST
+Sends mail to Prüfungsamt for correcty submitted application.
+User gets notification of successful submission
