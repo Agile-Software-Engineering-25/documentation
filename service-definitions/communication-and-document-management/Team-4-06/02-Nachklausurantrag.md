@@ -2,11 +2,15 @@
 
 ## General Structure
 
-### `/studienbescheinigung`
+### `/nachklausur`
 
 #### GET
-Button to be able to get Studienbescheinigung
+Empty application with the following fields:
+- `name` (filled out through jwt token)
+- `matrikelnummer` (filled out through jwt token)
+- `modul`: dropdown
+- `pruefungstermin`: date
 
 #### POST
-Download Studienbescheinigung.
-The Studienbescheinigung is being opened in PDF in a new web window
+Sends mail to Prüfungsamt for correcty submitted application.
+User gets notification of successful submission
