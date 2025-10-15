@@ -20,7 +20,7 @@
     "/notifications": {
       "post": {
         "summary": "Send notification",
-        "description": "Sends a notification to one or more users or to a user group. Requires a valid JWT Bearer Token.",
+        "description": "Sends a notification to one or more users or to user groups. Requires a valid JWT Bearer Token. The notification can be delivered via email, UI, or both depending on the notifyType parameter.",
         "operationId": "sendNotification",
         "security": [
           {
@@ -32,14 +32,62 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NotificationRequest"
+                "$ref": "#/components/schemas/NotificationCreationDto"
+              },
+              "examples": {
+                "notificationToUsers": {
+                  "summary": "Notification to specific users",
+                  "value": {
+                    "users": [
+                      "123e4567-e89b-12d3-a456-426614174000",
+                      "123e4567-e89b-12d3-a456-426614174001"
+                    ],
+                    "title": "System Update",
+                    "message": "The system will be undergoing maintenance on Sunday at 2 AM.",
+                    "shortDescription": "Scheduled maintenance notification",
+                    "priority": true,
+                    "notifyType": "All",
+                    "notificationType": "Info"
+                  }
+                },
+                "notificationToGroups": {
+                  "summary": "Notification to user groups",
+                  "value": {
+                    "groups": [
+                      "123e4567-e89b-12d3-a456-426614174010"
+                    ],
+                    "title": "New Feature Available",
+                    "message": "Check out our new dashboard analytics feature!",
+                    "shortDescription": "New feature announcement",
+                    "priority": false,
+                    "notifyType": "UI",
+                    "notificationType": "Congratulation"
+                  }
+                },
+                "notificationToUsersAndGroups": {
+                  "summary": "Notification to both users and groups",
+                  "value": {
+                    "users": [
+                      "123e4567-e89b-12d3-a456-426614174000"
+                    ],
+                    "groups": [
+                      "123e4567-e89b-12d3-a456-426614174010"
+                    ],
+                    "title": "Security Alert",
+                    "message": "Suspicious activity detected on your account. Please review your recent activities.",
+                    "shortDescription": "Security notification",
+                    "priority": true,
+                    "notifyType": "All",
+                    "notificationType": "Warning"
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Notification sent successfully",
+            "description": "Notification sent successfully. Returns an array of created notifications (one per recipient).",
             "content": {
               "application/json": {
                 "schema": {
@@ -47,16 +95,34 @@
                   "items": {
                     "$ref": "#/components/schemas/Notification"
                   }
-                }
+                },
+                "example": [
+                  {
+                    "id": "123e4567-e89b-12d3-a456-426614174020",
+                    "userId": "123e4567-e89b-12d3-a456-426614174000",
+                    "title": "System Update",
+                    "message": "The system will be undergoing maintenance on Sunday at 2 AM.",
+                    "shortDescription": "Scheduled maintenance notification",
+                    "priority": true,
+                    "notifyType": "All",
+                    "notificationType": "Info",
+                    "receivedAt": "2025-10-15T10:30:00Z",
+                    "readAt": null
+                  }
+                ]
               }
             }
           },
           "400": {
-            "description": "Bad Request",
+            "description": "Bad Request - Invalid input data",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "Bad Request",
+                  "details": "Title and message are required fields"
                 }
               }
             }
@@ -67,6 +133,10 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "details": "JWT token is missing or invalid"
                 }
               }
             }
@@ -77,198 +147,22 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "summary": "Get notifications for a user",
-        "description": "Retrieves all notifications for a specific user. Requires a valid JWT Bearer Token.",
-        "operationId": "getNotifications",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "query",
-            "required": true,
-            "description": "The UUID of the user to retrieve notifications for",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of notifications retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Notification"
-                  }
+                },
+                "example": {
+                  "error": "Forbidden",
+                  "details": "Insufficient permissions to send notifications"
                 }
               }
             }
           },
-          "401": {
-            "description": "Unauthorized – JWT is missing or invalid",
+          "501": {
+            "description": "Not Implemented - Group service unavailable or error fetching group members",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden – User not allowed to perform this action",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/notifications/mark-as-read/{notificationId}": {
-      "post": {
-        "summary": "Mark notification as read",
-        "description": "Marks a specific notification as read. Requires a valid JWT Bearer Token.",
-        "operationId": "markNotificationAsRead",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "notificationId",
-            "in": "path",
-            "required": true,
-            "description": "The UUID of the notification to mark as read",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Notification marked as read successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "example": "Notification marked as read"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized – JWT is missing or invalid",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden – User not allowed to perform this action",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Notification not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/notifications/mark-as-unread/{notificationId}": {
-      "post": {
-        "summary": "Mark notification as unread",
-        "description": "Marks a specific notification as unread. Requires a valid JWT Bearer Token.",
-        "operationId": "markNotificationAsUnread",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "notificationId",
-            "in": "path",
-            "required": true,
-            "description": "The UUID of the notification to mark as unread",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Notification marked as unread successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "example": "Notification marked as unread"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized – JWT is missing or invalid",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden – User not allowed to perform this action",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Notification not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
+                  "type": "string"
+                },
+                "example": "Group service is currently unavailable"
               }
             }
           }
@@ -278,7 +172,7 @@
     "/emails": {
       "post": {
         "summary": "Send email",
-        "description": "Sends an email to one or more users. Requires a valid JWT Bearer Token.\n\nNote: This endpoint should only be used when a notification cannot be created (e.g., when the recipient does not have an account yet). For standard use cases, creating a notification via the /notifications endpoint can automatically send an email to the user if configured.",
+        "description": "Sends an email to one or more recipients. Requires a valid JWT Bearer Token.\n\nNote: This endpoint should only be used when a notification cannot be created (e.g., when the recipient does not have an account yet). For standard use cases, creating a notification via the /notifications endpoint with notifyType='Mail' or 'All' can automatically send an email to the user.\n\nThe email can be sent as plain text or using a predefined template with variables.",
         "operationId": "sendEmail",
         "security": [
           {
@@ -290,29 +184,112 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EmailRequest"
+                "$ref": "#/components/schemas/EmailNotificationRequestDto"
+              },
+              "examples": {
+                "plainTextEmail": {
+                  "summary": "Plain text email",
+                  "value": {
+                    "to": [
+                      "user@example.com",
+                      "admin@example.com"
+                    ],
+                    "subject": "Welcome to Our Platform",
+                    "text": "Hello! Welcome to our platform. We're excited to have you here.",
+                    "replyTo": "support@example.com"
+                  }
+                },
+                "templateEmailWelcome": {
+                  "summary": "Email using WELCOME template",
+                  "value": {
+                    "to": [
+                      "newuser@example.com"
+                    ],
+                    "subject": "Welcome to Our Platform",
+                    "template": "WELCOME",
+                    "variables": {
+                      "userName": "John Doe",
+                      "activationLink": "https://example.com/activate/abc123"
+                    },
+                    "replyTo": "support@example.com"
+                  }
+                },
+                "templateEmailGenericCTA": {
+                  "summary": "Email using GENERIC_WITH_CTA template",
+                  "value": {
+                    "to": [
+                      "user@example.com"
+                    ],
+                    "subject": "Complete Your Profile",
+                    "template": "GENERIC_WITH_CTA",
+                    "variables": {
+                      "title": "Complete Your Profile",
+                      "message": "Please take a moment to complete your profile to get the most out of our platform.",
+                      "ctaText": "Complete Profile"
+                    },
+                    "ctaLink": "https://example.com/profile/complete",
+                    "replyTo": "noreply@example.com"
+                  }
+                },
+                "templateEmailResetPassword": {
+                  "summary": "Email using RESET_PASSWORD template",
+                  "value": {
+                    "to": [
+                      "user@example.com"
+                    ],
+                    "subject": "Reset Your Password",
+                    "template": "RESET_PASSWORD",
+                    "variables": {
+                      "userName": "Jane Smith",
+                      "resetLink": "https://example.com/reset-password/token123"
+                    }
+                  }
+                }
               }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "Email sent successfully",
+          "202": {
+            "description": "Email accepted for sending. The email has been queued and will be sent asynchronously.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string",
-                  "example": "Email sent successfully"
-                }
+                  "type": "string"
+                },
+                "example": "Email sent successfully"
               }
             }
           },
           "400": {
-            "description": "Bad Request",
+            "description": "Bad Request - Invalid email addresses, missing required fields, or validation errors",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "invalidEmail": {
+                    "summary": "Invalid email address",
+                    "value": {
+                      "error": "Bad Request",
+                      "details": "Invalid email address format"
+                    }
+                  },
+                  "missingSubject": {
+                    "summary": "Missing required field",
+                    "value": {
+                      "error": "Bad Request",
+                      "details": "Subject is required"
+                    }
+                  },
+                  "invalidTemplate": {
+                    "summary": "Invalid template",
+                    "value": {
+                      "error": "Bad Request",
+                      "details": "Template must be one of: WELCOME, RESET_PASSWORD, GENERIC_WITH_CTA"
+                    }
+                  }
                 }
               }
             }
@@ -323,6 +300,10 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "details": "JWT token is missing or invalid"
                 }
               }
             }
@@ -333,6 +314,24 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "Forbidden",
+                  "details": "Insufficient permissions to send emails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - Email service error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "Internal Server Error",
+                  "details": "Failed to send email due to mail server error"
                 }
               }
             }
@@ -347,11 +346,11 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT",
-        "description": "JWT-based authentication using Bearer tokens"
+        "description": "JWT-based authentication using Bearer tokens. Required role: Area-4.Team-15.Write.SendNotification"
       }
     },
     "schemas": {
-      "NotificationRequest": {
+      "NotificationCreationDto": {
         "type": "object",
         "required": [
           "title",
@@ -364,7 +363,11 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "List of user UUIDs to receive the notification"
+            "description": "List of user UUIDs to receive the notification. Can be combined with groups.",
+            "example": [
+              "123e4567-e89b-12d3-a456-426614174000",
+              "123e4567-e89b-12d3-a456-426614174001"
+            ]
           },
           "groups": {
             "type": "array",
@@ -372,34 +375,51 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "List of group UUIDs to receive the notification"
+            "description": "List of group UUIDs to receive the notification. All users in these groups will receive the notification. Can be combined with users.",
+            "example": [
+              "123e4567-e89b-12d3-a456-426614174010"
+            ]
           },
           "title": {
             "type": "string",
-            "description": "Title of the notification"
+            "description": "Title of the notification (required)",
+            "example": "System Update"
           },
           "message": {
             "type": "string",
-            "description": "The notification message"
+            "description": "The notification message content (required)",
+            "example": "The system will be undergoing maintenance on Sunday at 2 AM."
           },
           "priority": {
             "type": "boolean",
             "default": false,
-            "description": "Priority of the notification"
+            "description": "Priority flag of the notification. High priority notifications may be displayed more prominently.",
+            "example": true
           },
           "shortDescription": {
             "type": "string",
-            "description": "Short description of the notification"
+            "description": "Short description or preview of the notification",
+            "example": "Scheduled maintenance notification"
           },
           "notifyType": {
             "type": "string",
-            "enum": ["Mail", "UI", "All"],
-            "description": "Notification delivery method (Mail, UI, or All)"
+            "enum": [
+              "Mail",
+              "UI",
+              "All"
+            ],
+            "description": "Notification delivery method:\n- Mail: Send only via email\n- UI: Display only in the UI\n- All: Send via both email and UI",
+            "example": "All"
           },
           "notificationType": {
             "type": "string",
-            "enum": ["Info", "Warning", "Congratulation", "None"],
-            "description": "Visual representation of the notification in the frontend dropdown (determines which icon is displayed next to the notification). Additional types can be added upon request."
+            "enum": [
+              "Info",
+              "Warning",
+              "Congratulation",
+              "None"
+            ],
+            "example": "Info"
           }
         }
       },
@@ -409,56 +429,76 @@
           "id": {
             "type": "string",
             "format": "uuid",
-            "description": "Unique identifier of the notification"
+            "description": "Unique identifier of the notification (auto-generated)",
+            "example": "123e4567-e89b-12d3-a456-426614174020"
           },
           "userId": {
             "type": "string",
             "format": "uuid",
-            "description": "UUID of the user who receives the notification"
+            "description": "UUID of the user who receives the notification",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
           },
           "title": {
             "type": "string",
-            "description": "Title of the notification"
+            "description": "Title of the notification",
+            "example": "System Update"
           },
           "message": {
             "type": "string",
-            "description": "The notification message content"
+            "description": "The notification message content",
+            "example": "The system will be undergoing maintenance on Sunday at 2 AM."
           },
           "shortDescription": {
             "type": "string",
-            "description": "Short description of the notification"
+            "description": "Short description or preview of the notification",
+            "example": "Scheduled maintenance notification"
           },
           "priority": {
             "type": "boolean",
-            "description": "Priority flag of the notification"
+            "description": "Priority flag of the notification",
+            "example": true
           },
           "notifyType": {
             "type": "string",
-            "description": "Notification delivery method (Mail, UI, All)"
+            "enum": [
+              "Mail",
+              "UI",
+              "All"
+            ],
+            "description": "Notification delivery method",
+            "example": "All"
           },
           "notificationType": {
             "type": "string",
-            "description": "Visual display type (Info, Warning, Congratulation, None)"
+            "enum": [
+              "Info",
+              "Warning",
+              "Congratulation",
+              "None"
+            ],
+            "description": "Visual display type",
+            "example": "Info"
           },
           "receivedAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Timestamp when the notification was received"
+            "description": "Timestamp when the notification was created and received (ISO 8601 format)",
+            "example": "2025-10-15T10:30:00Z"
           },
           "readAt": {
             "type": "string",
             "format": "date-time",
             "nullable": true,
-            "description": "Timestamp when the notification was read (null if unread)"
+            "description": "Timestamp when the notification was read (ISO 8601 format). Null if the notification is unread.",
+            "example": "2025-10-15T11:00:00Z"
           }
         }
       },
-      "EmailRequest": {
+      "EmailNotificationRequestDto": {
         "type": "object",
         "required": [
           "to",
-          "subject",
-          "body"
+          "subject"
         ],
         "properties": {
           "to": {
@@ -467,21 +507,54 @@
               "type": "string",
               "format": "email"
             },
-            "description": "List of email addresses to send the email to"
+            "minItems": 1,
+            "description": "List of email addresses to send the email to (required). Each email must be a valid email address.",
+            "example": [
+              "user@example.com",
+              "admin@example.com"
+            ]
           },
           "subject": {
             "type": "string",
-            "description": "Email subject"
+            "minLength": 1,
+            "description": "Email subject line (required)",
+            "example": "Welcome to Our Platform"
           },
-          "body": {
+          "text": {
             "type": "string",
-            "description": "Email body content"
+            "description": "Plain text email body content. Use this for simple text-only emails. If a template is specified, this field is ignored.",
+            "example": "Hello! Welcome to our platform. We're excited to have you here."
           },
-          "readAt": {
+          "template": {
             "type": "string",
-            "format": "date-time",
-            "nullable": true,
-            "description": "Timestamp when the notification was read (null if unread)"
+            "enum": [
+              "WELCOME",
+              "RESET_PASSWORD",
+              "GENERIC_WITH_CTA"
+            ],
+            "description": "Predefined email template to use:\n- WELCOME: Welcome email template for new users\n- RESET_PASSWORD: Password reset email template\n- GENERIC_WITH_CTA: Generic template with a call-to-action button\n\nIf specified, the 'text' field is ignored and the template is used instead.",
+            "example": "WELCOME"
+          },
+          "variables": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Key-value pairs of variables to inject into the email template. The required variables depend on the chosen template:\n- WELCOME: userName, activationLink\n- RESET_PASSWORD: userName, resetLink\n- GENERIC_WITH_CTA: title, message, ctaText",
+            "example": {
+              "userName": "John Doe",
+              "activationLink": "https://example.com/activate/abc123"
+            }
+          },
+          "ctaLink": {
+            "type": "string",
+            "format": "uri",
+            "description": "Call-to-action link URL. Used with GENERIC_WITH_CTA template to specify the button destination.",
+            "example": "https://example.com/profile/complete"
+          },
+          "replyTo": {
+            "type": "string",
+            "format": "email",
+            "description": "Reply-to email address. If specified, replies to the email will be sent to this address instead of the sender.",
+            "example": "support@example.com"
           }
         }
       },
@@ -490,11 +563,13 @@
         "properties": {
           "error": {
             "type": "string",
-            "description": "Error message"
+            "description": "Error message summary",
+            "example": "Bad Request"
           },
           "details": {
             "type": "string",
-            "description": "Detailed error description"
+            "description": "Detailed error description",
+            "example": "Invalid email address format"
           }
         }
       }
