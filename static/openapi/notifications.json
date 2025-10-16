@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.1",
   "info": {
-    "title": "Notification Microservice API",
+    "title": "Notification Service",
     "description": "Microservice for notifications – allows sending messages to users or user groups.\n\nAnyone who wants to use the message sending functionality in their service must have Team 10 add the role \"Area-4.Team-15.Write.SendNotification\" to their service. With this role, the service can obtain a JWT, which it then sends along with the request, allowing us to verify the permissions.",
-    "version": "1.0.0"
+    "version": "1.0"
   },
   "servers": [
     {
@@ -19,9 +19,9 @@
   "paths": {
     "/notifications": {
       "post": {
-        "summary": "Send notification",
+        "summary": "Create notifications (optionally send email)",
         "description": "Sends a notification to one or more users or to user groups. Requires a valid JWT Bearer Token. The notification can be delivered via email, UI, or both depending on the notifyType parameter.",
-        "operationId": "sendNotification",
+        "operationId": "postNotification",
         "security": [
           {
             "bearerAuth": []
@@ -35,50 +35,37 @@
                 "$ref": "#/components/schemas/NotificationCreationDto"
               },
               "examples": {
-                "notificationToUsers": {
-                  "summary": "Notification to specific users",
+                "minimalMail": {
+                  "summary": "Minimal email (template chosen by server)",
                   "value": {
                     "users": [
-                      "123e4567-e89b-12d3-a456-426614174000",
-                      "123e4567-e89b-12d3-a456-426614174001"
+                      "1"
                     ],
-                    "title": "System Update",
-                    "message": "The system will be undergoing maintenance on Sunday at 2 AM.",
-                    "shortDescription": "Scheduled maintenance notification",
-                    "priority": true,
-                    "notifyType": "All",
+                    "title": "Willkommen",
+                    "message": "Willkommen bei SAU!",
+                    "notifyType": "Mail",
                     "notificationType": "Info"
                   }
                 },
-                "notificationToGroups": {
-                  "summary": "Notification to user groups",
-                  "value": {
-                    "groups": [
-                      "123e4567-e89b-12d3-a456-426614174010"
-                    ],
-                    "title": "New Feature Available",
-                    "message": "Check out our new dashboard analytics feature!",
-                    "shortDescription": "New feature announcement",
-                    "priority": false,
-                    "notifyType": "UI",
-                    "notificationType": "Congratulation"
-                  }
-                },
-                "notificationToUsersAndGroups": {
-                  "summary": "Notification to both users and groups",
+                "fullGenericWithCta": {
+                  "summary": "Explicit GENERIC_WITH_CTA with variables",
                   "value": {
                     "users": [
-                      "123e4567-e89b-12d3-a456-426614174000"
+                      "1"
                     ],
-                    "groups": [
-                      "123e4567-e89b-12d3-a456-426614174010"
-                    ],
-                    "title": "Security Alert",
-                    "message": "Suspicious activity detected on your account. Please review your recent activities.",
-                    "shortDescription": "Security notification",
-                    "priority": true,
-                    "notifyType": "All",
-                    "notificationType": "Warning"
+                    "title": "Abgabefrist DB Systems Lab",
+                    "message": "Abgabe bis 20.10.2025, 23:59 Uhr.",
+                    "notifyType": "Mail",
+                    "notificationType": "Info",
+                    "emailTemplate": "GENERIC_WITH_CTA",
+                    "variables": {
+                      "header": "Abgabe",
+                      "name": "Max Mustermann",
+                      "highlightLine": "Abgabe DB Systems Lab bis 20.10.2025, 23:59 Uhr.",
+                      "ctaUrl": "https://portal.example.edu/assignments/42",
+                      "ctaLabel": "Zur Aufgabe",
+                      "footer": "SAU (Student Assistance Utilities)"
+                    }
                   }
                 }
               }
@@ -156,13 +143,12 @@
             }
           },
           "501": {
-            "description": "Not Implemented - Group service unavailable or error fetching group members",
+            "description": "Group notifications disabled",
             "content": {
-              "application/json": {
+              "text/plain": {
                 "schema": {
                   "type": "string"
-                },
-                "example": "Group service is currently unavailable"
+                }
               }
             }
           }
@@ -187,62 +173,33 @@
                 "$ref": "#/components/schemas/EmailNotificationRequestDto"
               },
               "examples": {
-                "plainTextEmail": {
-                  "summary": "Plain text email",
+                "templated": {
+                  "summary": "Using a template with variables",
                   "value": {
                     "to": [
-                      "user@example.com",
-                      "admin@example.com"
+                      "max.mustermann@example.com"
                     ],
-                    "subject": "Welcome to Our Platform",
-                    "text": "Hello! Welcome to our platform. We're excited to have you here.",
-                    "replyTo": "support@example.com"
-                  }
-                },
-                "templateEmailWelcome": {
-                  "summary": "Email using WELCOME template",
-                  "value": {
-                    "to": [
-                      "newuser@example.com"
-                    ],
-                    "subject": "Welcome to Our Platform",
-                    "template": "WELCOME",
-                    "variables": {
-                      "userName": "John Doe",
-                      "activationLink": "https://example.com/activate/abc123"
-                    },
-                    "replyTo": "support@example.com"
-                  }
-                },
-                "templateEmailGenericCTA": {
-                  "summary": "Email using GENERIC_WITH_CTA template",
-                  "value": {
-                    "to": [
-                      "user@example.com"
-                    ],
-                    "subject": "Complete Your Profile",
+                    "subject": "Abgabefrist DB Systems Lab",
                     "template": "GENERIC_WITH_CTA",
                     "variables": {
-                      "title": "Complete Your Profile",
-                      "message": "Please take a moment to complete your profile to get the most out of our platform.",
-                      "ctaText": "Complete Profile"
+                      "header": "Abgabe",
+                      "name": "Max Mustermann",
+                      "highlightLine": "Abgabe DB Systems Lab bis 20.10.2025, 23:59 Uhr.",
+                      "ctaUrl": "https://portal.example.edu/assignments/42",
+                      "ctaLabel": "Zur Aufgabe"
                     },
-                    "ctaLink": "https://example.com/profile/complete",
                     "replyTo": "noreply@example.com"
                   }
                 },
-                "templateEmailResetPassword": {
-                  "summary": "Email using RESET_PASSWORD template",
+                "plainText": {
+                  "summary": "Plain-text only (no template)",
                   "value": {
                     "to": [
-                      "user@example.com"
+                      "max.mustermann@example.com"
                     ],
-                    "subject": "Reset Your Password",
-                    "template": "RESET_PASSWORD",
-                    "variables": {
-                      "userName": "Jane Smith",
-                      "resetLink": "https://example.com/reset-password/token123"
-                    }
+                    "subject": "Systemhinweis",
+                    "text": "Wartung heute um 22:00 Uhr. Bitte speichern Sie Ihre Arbeit.",
+                    "replyTo": "support@example.com"
                   }
                 }
               }
@@ -250,44 +207,19 @@
           }
         },
         "responses": {
-          "202": {
-            "description": "Email accepted for sending. The email has been queued and will be sent asynchronously.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                },
-                "example": "Email sent successfully"
-              }
-            }
+          "204": {
+            "description": "Email accepted for delivery (no content)"
           },
           "400": {
-            "description": "Bad Request - Invalid email addresses, missing required fields, or validation errors",
+            "description": "Validation error or no content (neither template nor text provided)",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "examples": {
-                  "invalidEmail": {
-                    "summary": "Invalid email address",
-                    "value": {
-                      "error": "Bad Request",
-                      "details": "Invalid email address format"
-                    }
-                  },
-                  "missingSubject": {
-                    "summary": "Missing required field",
-                    "value": {
-                      "error": "Bad Request",
-                      "details": "Subject is required"
-                    }
-                  },
-                  "invalidTemplate": {
-                    "summary": "Invalid template",
-                    "value": {
-                      "error": "Bad Request",
-                      "details": "Template must be one of: WELCOME, RESET_PASSWORD, GENERIC_WITH_CTA"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "no content, provide either a template or text"
                     }
                   }
                 }
@@ -295,43 +227,33 @@
             }
           },
           "401": {
-            "description": "Unauthorized – JWT is missing or invalid",
+            "description": "SMTP authentication failed",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "error": "Unauthorized",
-                  "details": "JWT token is missing or invalid"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "SMTP authentication failed"
+                    }
+                  }
                 }
               }
             }
           },
-          "403": {
-            "description": "Forbidden – User not allowed to perform this action",
+          "502": {
+            "description": "Mail server error (MessagingException or encoding issues)",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "error": "Forbidden",
-                  "details": "Insufficient permissions to send emails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error - Email service error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "error": "Internal Server Error",
-                  "details": "Failed to send email due to mail server error"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Mail server error"
+                    }
+                  }
                 }
               }
             }
@@ -420,6 +342,14 @@
               "None"
             ],
             "example": "Info"
+          },
+          "emailTemplate": {
+            "$ref": "#/components/schemas/EmailTemplate",
+            "description": "Optional email template. When notifyType is 'Mail' or 'All', specifies which email template to use. If omitted, server chooses a default template."
+          },
+          "variables": {
+            "$ref": "#/components/schemas/TemplateVariables",
+            "description": "Optional template variables; ignored for UI-only notifications."
           }
         }
       },
@@ -522,33 +452,18 @@
           },
           "text": {
             "type": "string",
-            "description": "Plain text email body content. Use this for simple text-only emails. If a template is specified, this field is ignored.",
-            "example": "Hello! Welcome to our platform. We're excited to have you here."
+            "nullable": true,
+            "description": "Plain-text body. Used when no template is provided.\nIf both template and text are provided, text is used as the plain-text alternative part.",
+            "example": "Abgabe bis 20.10.2025, 23:59 Uhr."
           },
           "template": {
-            "type": "string",
-            "enum": [
-              "WELCOME",
-              "RESET_PASSWORD",
-              "GENERIC_WITH_CTA"
-            ],
-            "description": "Predefined email template to use:\n- WELCOME: Welcome email template for new users\n- RESET_PASSWORD: Password reset email template\n- GENERIC_WITH_CTA: Generic template with a call-to-action button\n\nIf specified, the 'text' field is ignored and the template is used instead.",
-            "example": "WELCOME"
+            "$ref": "#/components/schemas/EmailTemplate",
+            "description": "Optional. When set, the server renders the matching Thymeleaf template with variables.\nIf omitted, text must be provided; otherwise the server returns HTTP 400."
           },
           "variables": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Key-value pairs of variables to inject into the email template. The required variables depend on the chosen template:\n- WELCOME: userName, activationLink\n- RESET_PASSWORD: userName, resetLink\n- GENERIC_WITH_CTA: title, message, ctaText",
-            "example": {
-              "userName": "John Doe",
-              "activationLink": "https://example.com/activate/abc123"
-            }
-          },
-          "ctaLink": {
-            "type": "string",
-            "format": "uri",
-            "description": "Call-to-action link URL. Used with GENERIC_WITH_CTA template to specify the button destination.",
-            "example": "https://example.com/profile/complete"
+            "$ref": "#/components/schemas/TemplateVariables",
+            "description": "Optional key-value variables consumed by the selected template. All fields optional.",
+            "example": "https://portal.example.edu/assignments/42"
           },
           "replyTo": {
             "type": "string",
@@ -570,6 +485,110 @@
             "type": "string",
             "description": "Detailed error description",
             "example": "Invalid email address format"
+          }
+        }
+      },
+      "EmailTemplate": {
+        "type": "string",
+        "description": "Matches server-side enum / template filenames.",
+        "enum": [
+          "GENERIC",
+          "GENERIC_WITH_CTA"
+        ]
+      },
+      "TemplateVariables": {
+        "type": "object",
+        "description": "Key-value variables used by the selected email template. All fields optional.",
+        "properties": {
+          "header": {
+            "type": "string",
+            "example": "Abgabe"
+          },
+          "name": {
+            "type": "string",
+            "example": "Max Mustermann"
+          },
+          "body": {
+            "type": "array",
+            "description": "List of paragraph texts.",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "Bitte reiche deine Aufgabe rechtzeitig ein."
+            ]
+          },
+          "highlightLine": {
+            "type": "string",
+            "example": "Abgabe DB Systems Lab bis 20.10.2025, 23:59 Uhr."
+          },
+          "facts": {
+            "type": "array",
+            "description": "Structured key/value facts (e.g., Course, Deadline, Grade).",
+            "items": {
+              "type": "object",
+              "required": [
+                "key",
+                "value"
+              ],
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "example": "Kurs"
+                },
+                "value": {
+                  "type": "string",
+                  "example": "DB Systems Lab"
+                }
+              }
+            }
+          },
+          "ctaUrl": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://portal.example.edu/assignments/42"
+          },
+          "ctaLabel": {
+            "type": "string",
+            "example": "Zur Aufgabe"
+          },
+          "secondaryLinks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "label",
+                "url"
+              ],
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "example": "Mehr Info"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "example": "https://provadis.de"
+                }
+              }
+            }
+          },
+          "note": {
+            "type": "string",
+            "example": "Diese Mail wurde automatisch generiert."
+          },
+          "footer": {
+            "type": "string",
+            "example": "SAU (Student Assistance Utilities)"
+          },
+          "logoUrl": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://example.com/logo.svg"
+          },
+          "preheader": {
+            "type": "string",
+            "example": "Abgabe DB Systems Lab steht an"
           }
         }
       }
