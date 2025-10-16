@@ -12,52 +12,40 @@
     }
   ],
   "security": [
-    {
-      "bearerAuth": []
-    }
+    { "bearerAuth": [] }
   ],
   "paths": {
     "/notifications": {
       "post": {
         "summary": "Create notifications (optionally send email)",
-        "description": "Sends a notification to one or more users or to user groups. Requires a valid JWT Bearer Token. The notification can be delivered via email, UI, or both depending on the notifyType parameter.",
+        "description": "Sends a notification to one or more users or to user groups. Requires a valid JWT Bearer Token. Delivery can be email, UI, or both via notifyType.\n\nEmail behavior:\n- If notifyType is Mail or All and emailTemplate is provided → that template is used with variables.\n- If notifyType is Mail or All and emailTemplate is omitted → the server uses the GENERIC template for all notificationType values (Info, Warning, Congratulation, None). Missing variables simply hide sections.\n- Email subject is always taken from title. The in-body visual header comes from variables.header if set; otherwise it falls back to title or a type-based default; if still missing the template shows \"Benachrichtigung\".",
         "operationId": "postNotification",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [ { "bearerAuth": [] } ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NotificationCreationDto"
-              },
+              "schema": { "$ref": "#/components/schemas/NotificationCreationDto" },
               "examples": {
                 "minimalMail": {
-                  "summary": "Minimal email (template chosen by server)",
+                  "summary": "Minimal email (server uses GENERIC with defaults)",
                   "value": {
-                    "users": [
-                      "1"
-                    ],
+                    "users": ["1"],
                     "title": "Willkommen",
                     "message": "Willkommen bei SAU!",
                     "notifyType": "Mail",
                     "notificationType": "Info"
                   }
                 },
-                "fullGenericWithCta": {
-                  "summary": "Explicit GENERIC_WITH_CTA with variables",
+                "fullGeneric": {
+                  "summary": "Explicit GENERIC with variables",
                   "value": {
-                    "users": [
-                      "1"
-                    ],
+                    "users": ["1"],
                     "title": "Abgabefrist DB Systems Lab",
                     "message": "Abgabe bis 20.10.2025, 23:59 Uhr.",
                     "notifyType": "Mail",
                     "notificationType": "Info",
-                    "emailTemplate": "GENERIC_WITH_CTA",
+                    "emailTemplate": "GENERIC",
                     "variables": {
                       "header": "Abgabe",
                       "name": "Max Mustermann",
@@ -67,6 +55,19 @@
                       "footer": "SAU (Student Assistance Utilities)"
                     }
                   }
+                },
+                "noneWithGeneric": {
+                  "summary": "notificationType=None still renders via GENERIC",
+                  "value": {
+                    "users": ["1"],
+                    "title": "Hinweis",
+                    "message": "Nur eine kurze Info.",
+                    "notifyType": "Mail",
+                    "notificationType": "None",
+                    "variables": {
+                      "body": ["Nur eine kurze Info."]
+                    }
+                  }
                 }
               }
             }
@@ -74,14 +75,12 @@
         },
         "responses": {
           "201": {
-            "description": "Notification sent successfully. Returns an array of created notifications (one per recipient).",
+            "description": "Notification created. Returns an array of created notifications (one per recipient).",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Notification"
-                  }
+                  "items": { "$ref": "#/components/schemas/Notification" }
                 },
                 "example": [
                   {
@@ -104,9 +103,7 @@
             "description": "Bad Request - Invalid input data",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
                 "example": {
                   "error": "Bad Request",
                   "details": "Title and message are required fields"
@@ -118,39 +115,23 @@
             "description": "Unauthorized – JWT is missing or invalid",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "error": "Unauthorized",
-                  "details": "JWT token is missing or invalid"
-                }
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": { "error": "Unauthorized", "details": "JWT token is missing or invalid" }
               }
             }
           },
           "403": {
-            "description": "Forbidden – User not allowed to perform this action",
+            "description": "Forbidden – Insufficient permissions",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "error": "Forbidden",
-                  "details": "Insufficient permissions to send notifications"
-                }
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": { "error": "Forbidden", "details": "Insufficient permissions to send notifications" }
               }
             }
           },
           "501": {
             "description": "Group notifications disabled",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "content": { "text/plain": { "schema": { "type": "string" } } }
           }
         }
       }
@@ -158,29 +139,21 @@
     "/emails": {
       "post": {
         "summary": "Send email",
-        "description": "Sends an email to one or more recipients. Requires a valid JWT Bearer Token.\n\nNote: This endpoint should only be used when a notification cannot be created (e.g., when the recipient does not have an account yet). For standard use cases, creating a notification via the /notifications endpoint with notifyType='Mail' or 'All' can automatically send an email to the user.\n\nThe email can be sent as plain text or using a predefined template with variables.",
+        "description": "Sends an email to one or more recipients. Requires a valid JWT Bearer Token.\n\nUse this when no notification can be created (e.g., recipient has no account yet). Otherwise, prefer `/notifications` with `notifyType='Mail'` or `'All'`.\n\nEmail can be sent as plain text or using the GENERIC template with variables. If `template` is omitted here, `text` must be provided.",
         "operationId": "sendEmail",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [ { "bearerAuth": [] } ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EmailNotificationRequestDto"
-              },
+              "schema": { "$ref": "#/components/schemas/EmailNotificationRequestDto" },
               "examples": {
                 "templated": {
-                  "summary": "Using a template with variables",
+                  "summary": "Using GENERIC with variables",
                   "value": {
-                    "to": [
-                      "max.mustermann@example.com"
-                    ],
+                    "to": ["max.mustermann@example.com"],
                     "subject": "Abgabefrist DB Systems Lab",
-                    "template": "GENERIC_WITH_CTA",
+                    "template": "GENERIC",
                     "variables": {
                       "header": "Abgabe",
                       "name": "Max Mustermann",
@@ -194,9 +167,7 @@
                 "plainText": {
                   "summary": "Plain-text only (no template)",
                   "value": {
-                    "to": [
-                      "max.mustermann@example.com"
-                    ],
+                    "to": ["max.mustermann@example.com"],
                     "subject": "Systemhinweis",
                     "text": "Wartung heute um 22:00 Uhr. Bitte speichern Sie Ihre Arbeit.",
                     "replyTo": "support@example.com"
@@ -207,9 +178,7 @@
           }
         },
         "responses": {
-          "204": {
-            "description": "Email accepted for delivery (no content)"
-          },
+          "204": { "description": "Email accepted for delivery (no content)" },
           "400": {
             "description": "Validation error or no content (neither template nor text provided)",
             "content": {
@@ -217,10 +186,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "no content, provide either a template or text"
-                    }
+                    "error": { "type": "string", "example": "no content, provide either a template or text" }
                   }
                 }
               }
@@ -233,10 +199,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "SMTP authentication failed"
-                    }
+                    "error": { "type": "string", "example": "SMTP authentication failed" }
                   }
                 }
               }
@@ -249,76 +212,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Mail server error"
-                    }
+                    "error": { "type": "string", "example": "Mail server error" }
                   }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/emails": {
-      "post": {
-        "summary": "Send email",
-        "description": "Sends an email to one or more users. Requires a valid JWT Bearer Token.\n\nNote: This endpoint should only be used when a notification cannot be created (e.g., when the recipient does not have an account yet). For standard use cases, creating a notification via the /notifications endpoint can automatically send an email to the user if configured.",
-        "operationId": "sendEmail",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EmailRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Email sent successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "example": "Email sent successfully"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized – JWT is missing or invalid",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden – User not allowed to perform this action",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -339,78 +234,56 @@
     "schemas": {
       "NotificationCreationDto": {
         "type": "object",
-        "required": [
-          "title",
-          "message"
-        ],
+        "required": ["title", "message"],
         "properties": {
           "users": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "format": "uuid"
-            },
+            "items": { "type": "string", "format": "uuid" },
             "description": "List of user UUIDs to receive the notification. Can be combined with groups.",
-            "example": [
-              "123e4567-e89b-12d3-a456-426614174000",
-              "123e4567-e89b-12d3-a456-426614174001"
-            ]
+            "example": ["123e4567-e89b-12d3-a456-426614174000"]
           },
           "groups": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "format": "uuid"
-            },
+            "items": { "type": "string", "format": "uuid" },
             "description": "List of group UUIDs to receive the notification. All users in these groups will receive the notification. Can be combined with users.",
-            "example": [
-              "123e4567-e89b-12d3-a456-426614174010"
-            ]
+            "example": ["123e4567-e89b-12d3-a456-426614174010"]
           },
           "title": {
             "type": "string",
-            "description": "Title of the notification (required)",
+            "description": "Title of the notification. Used as the email subject if an email is sent.",
             "example": "System Update"
           },
           "message": {
             "type": "string",
-            "description": "The notification message content (required)",
+            "description": "The notification message content. Used in UI and as the plain-text part for emails.",
             "example": "The system will be undergoing maintenance on Sunday at 2 AM."
           },
           "priority": {
             "type": "boolean",
             "default": false,
-            "description": "Priority flag of the notification. High priority notifications may be displayed more prominently.",
+            "description": "High priority notifications may be displayed more prominently; the email subject may be prefixed.",
             "example": true
           },
           "shortDescription": {
             "type": "string",
-            "description": "Short description or preview of the notification",
+            "description": "Short description / preview. Used as email preheader when available.",
             "example": "Scheduled maintenance notification"
           },
           "notifyType": {
             "type": "string",
-            "enum": [
-              "Mail",
-              "UI",
-              "All"
-            ],
-            "description": "Notification delivery method:\n- Mail: Send only via email\n- UI: Display only in the UI\n- All: Send via both email and UI",
+            "enum": ["Mail", "UI", "All"],
+            "description": "Delivery method: Mail (email only), UI (UI only), or All (both).",
             "example": "All"
           },
-          "notifyType": {
+          "notificationType": {
             "type": "string",
-            "enum": [
-              "Info",
-              "Warning",
-              "Congratulation",
-              "None"
-            ],
+            "enum": ["Info", "Warning", "Congratulation", "None"],
+            "description": "Semantic type used for tone and defaults. When notifyType includes Mail and no emailTemplate is provided, the server uses the GENERIC template for all values, including None.",
             "example": "Info"
           },
           "emailTemplate": {
             "$ref": "#/components/schemas/EmailTemplate",
-            "description": "Optional email template. When notifyType is 'Mail' or 'All', specifies which email template to use. If omitted, server chooses a default template."
+            "description": "Optional email template. If omitted and email is requested, the server uses GENERIC for all notification types."
           },
           "variables": {
             "$ref": "#/components/schemas/TemplateVariables",
@@ -424,147 +297,31 @@
           "id": {
             "type": "string",
             "format": "uuid",
-            "description": "Unique identifier of the notification (auto-generated)",
-            "example": "123e4567-e89b-12d3-a456-426614174020"
+            "description": "Unique identifier of the notification (auto-generated)"
           },
           "userId": {
             "type": "string",
             "format": "uuid",
-            "description": "UUID of the user who receives the notification",
-            "example": "123e4567-e89b-12d3-a456-426614174000"
+            "description": "UUID of the user who receives the notification"
           },
-          "title": {
-            "type": "string",
-            "description": "Title of the notification",
-            "example": "System Update"
-          },
-          "message": {
-            "type": "string",
-            "description": "The notification message content",
-            "example": "The system will be undergoing maintenance on Sunday at 2 AM."
-          },
-          "shortDescription": {
-            "type": "string",
-            "description": "Short description or preview of the notification",
-            "example": "Scheduled maintenance notification"
-          },
-          "priority": {
-            "type": "boolean",
-            "description": "Priority flag of the notification",
-            "example": true
-          },
+          "title": { "type": "string", "description": "Title of the notification" },
+          "message": { "type": "string", "description": "Notification message content" },
+          "shortDescription": { "type": "string", "description": "Short description / preview" },
+          "priority": { "type": "boolean", "description": "Priority flag" },
           "notifyType": {
             "type": "string",
-            "enum": [
-              "Mail",
-              "UI",
-              "All"
-            ],
-            "description": "Notification delivery method",
-            "example": "All"
-          },
-          "notifyType": {
-            "type": "string",
-            "description": "Notification delivery method (Mail, UI, All)"
+            "enum": ["Mail", "UI", "All"],
+            "description": "Delivery method"
           },
           "notificationType": {
             "type": "string",
-            "enum": [
-              "Info",
-              "Warning",
-              "Congratulation",
-              "None"
-            ],
-            "description": "Visual display type",
-            "example": "Info"
+            "enum": ["Info", "Warning", "Congratulation", "None"],
+            "description": "Semantic type / tone"
           },
           "receivedAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Timestamp when the notification was created and received (ISO 8601 format)",
-            "example": "2025-10-15T10:30:00Z"
-          },
-          "readAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true,
-            "description": "Timestamp when the notification was read (ISO 8601 format). Null if the notification is unread.",
-            "example": "2025-10-15T11:00:00Z"
-          }
-        }
-      },
-      "EmailNotificationRequestDto": {
-        "type": "object",
-        "required": [
-          "to",
-          "subject"
-        ],
-        "properties": {
-          "to": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "email"
-            },
-            "minItems": 1,
-            "description": "List of email addresses to send the email to (required). Each email must be a valid email address.",
-            "example": [
-              "user@example.com",
-              "admin@example.com"
-            ]
-          },
-          "subject": {
-            "type": "string",
-            "minLength": 1,
-            "description": "Email subject line (required)",
-            "example": "Welcome to Our Platform"
-          },
-          "text": {
-            "type": "string",
-            "nullable": true,
-            "description": "Plain-text body. Used when no template is provided.\nIf both template and text are provided, text is used as the plain-text alternative part.",
-            "example": "Abgabe bis 20.10.2025, 23:59 Uhr."
-          },
-          "template": {
-            "$ref": "#/components/schemas/EmailTemplate",
-            "description": "Optional. When set, the server renders the matching Thymeleaf template with variables.\nIf omitted, text must be provided; otherwise the server returns HTTP 400."
-          },
-          "variables": {
-            "$ref": "#/components/schemas/TemplateVariables",
-            "description": "Optional key-value variables consumed by the selected template. All fields optional.",
-            "example": "https://portal.example.edu/assignments/42"
-          },
-          "replyTo": {
-            "type": "string",
-            "format": "email",
-            "description": "Reply-to email address. If specified, replies to the email will be sent to this address instead of the sender.",
-            "example": "support@example.com"
-          }
-        }
-      },
-      "EmailRequest": {
-        "type": "object",
-        "required": [
-          "to",
-          "subject",
-          "body"
-        ],
-        "properties": {
-          "to": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "email"
-            },
-            "description": "List of email addresses to send the email to"
-          },
-          "subject": {
-            "type": "string",
-            "description": "Email subject"
-          },
-          "body": {
-            "type": "string",
-            "description": "Email body content"
+            "description": "Timestamp when the notification was created (ISO 8601)"
           },
           "readAt": {
             "type": "string",
@@ -574,123 +331,107 @@
           }
         }
       },
+      "EmailNotificationRequestDto": {
+        "type": "object",
+        "required": ["to", "subject"],
+        "properties": {
+          "to": {
+            "type": "array",
+            "items": { "type": "string", "format": "email" },
+            "minItems": 1,
+            "description": "Recipient email addresses.",
+            "example": ["user@example.com"]
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Email subject line.",
+            "example": "Abgabefrist DB Systems Lab"
+          },
+          "text": {
+            "type": "string",
+            "nullable": true,
+            "description": "Plain-text body. Used when no template is provided. If both are provided, this is used as the plain-text alternative part.",
+            "example": "Abgabe bis 20.10.2025, 23:59 Uhr."
+          },
+          "template": {
+            "$ref": "#/components/schemas/EmailTemplate",
+            "description": "Optional. When set, the server renders the matching Thymeleaf template with variables. If omitted, text must be provided; otherwise HTTP 400."
+          },
+          "variables": {
+            "$ref": "#/components/schemas/TemplateVariables",
+            "description": "Optional key-value variables for the template."
+          },
+          "ctaLink": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "Optional legacy alias for variables.ctaUrl. The server may copy it into the variables map.",
+            "example": "https://portal.example.edu/assignments/42"
+          },
+          "replyTo": {
+            "type": "string",
+            "format": "email",
+            "nullable": true,
+            "description": "Optional reply-to address.",
+            "example": "noreply@example.com"
+          }
+        }
+      },
       "ErrorResponse": {
         "type": "object",
         "properties": {
-          "error": {
-            "type": "string",
-            "description": "Error message summary",
-            "example": "Bad Request"
-          },
-          "details": {
-            "type": "string",
-            "description": "Detailed error description",
-            "example": "Invalid email address format"
-          }
+          "error": { "type": "string", "description": "Error message summary" },
+          "details": { "type": "string", "description": "Detailed error description" }
         }
       },
       "EmailTemplate": {
         "type": "string",
         "description": "Matches server-side enum / template filenames.",
-        "enum": [
-          "GENERIC",
-          "GENERIC_WITH_CTA"
-        ]
+        "enum": ["GENERIC"]
       },
       "TemplateVariables": {
         "type": "object",
-        "description": "Key-value variables used by the selected email template. All fields optional.",
+        "description": "Key-value variables used by the generic email template. All fields optional; missing sections do not render.",
         "properties": {
-          "header": {
-            "type": "string",
-            "example": "Abgabe"
-          },
-          "name": {
-            "type": "string",
-            "example": "Max Mustermann"
-          },
+          "header": { "type": "string", "example": "Abgabe" },
+          "name": { "type": "string", "example": "Max Mustermann" },
           "body": {
             "type": "array",
             "description": "List of paragraph texts.",
-            "items": {
-              "type": "string"
-            },
-            "example": [
-              "Bitte reiche deine Aufgabe rechtzeitig ein."
-            ]
+            "items": { "type": "string" },
+            "example": ["Bitte reiche deine Aufgabe rechtzeitig ein."]
           },
-          "highlightLine": {
-            "type": "string",
-            "example": "Abgabe DB Systems Lab bis 20.10.2025, 23:59 Uhr."
-          },
+          "highlightLine": { "type": "string", "example": "Abgabe DB Systems Lab bis 20.10.2025, 23:59 Uhr." },
           "facts": {
             "type": "array",
             "description": "Structured key/value facts (e.g., Course, Deadline, Grade).",
             "items": {
               "type": "object",
-              "required": [
-                "key",
-                "value"
-              ],
+              "required": ["key", "value"],
               "properties": {
-                "key": {
-                  "type": "string",
-                  "example": "Kurs"
-                },
-                "value": {
-                  "type": "string",
-                  "example": "DB Systems Lab"
-                }
+                "key": { "type": "string", "example": "Kurs" },
+                "value": { "type": "string", "example": "DB Systems Lab" }
               }
             }
           },
-          "ctaUrl": {
-            "type": "string",
-            "format": "uri",
-            "example": "https://portal.example.edu/assignments/42"
-          },
-          "ctaLabel": {
-            "type": "string",
-            "example": "Zur Aufgabe"
-          },
+          "ctaUrl": { "type": "string", "format": "uri", "example": "https://portal.example.edu/assignments/42" },
+          "ctaLabel": { "type": "string", "example": "Zur Aufgabe" },
           "secondaryLinks": {
             "type": "array",
             "items": {
               "type": "object",
-              "required": [
-                "label",
-                "url"
-              ],
+              "required": ["label", "url"],
               "properties": {
-                "label": {
-                  "type": "string",
-                  "example": "Mehr Info"
-                },
-                "url": {
-                  "type": "string",
-                  "format": "uri",
-                  "example": "https://provadis.de"
-                }
+                "label": { "type": "string", "example": "Mehr Info" },
+                "url": { "type": "string", "format": "uri", "example": "https://provadis.de" }
               }
             }
           },
-          "note": {
-            "type": "string",
-            "example": "Diese Mail wurde automatisch generiert."
-          },
-          "footer": {
-            "type": "string",
-            "example": "SAU (Student Assistance Utilities)"
-          },
-          "logoUrl": {
-            "type": "string",
-            "format": "uri",
-            "example": "https://example.com/logo.svg"
-          },
-          "preheader": {
-            "type": "string",
-            "example": "Abgabe DB Systems Lab steht an"
-          }
+          "note": { "type": "string", "example": "Diese Mail wurde automatisch generiert." },
+          "footer": { "type": "string", "example": "SAU (Student Assistance Utilities)" },
+          "logoUrl": { "type": "string", "format": "uri", "example": "https://example.com/logo.svg" },
+          "preheader": { "type": "string", "example": "Abgabe DB Systems Lab steht an" }
         }
       }
     }
