@@ -129,9 +129,23 @@
               }
             }
           },
-          "501": {
-            "description": "Group notifications disabled",
-            "content": { "text/plain": { "schema": { "type": "string" } } }
+          "404": {
+            "description": "Not Found - One or more specified groups do not exist",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": { "error": "Not Found", "details": "One or more groups not found" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - Error fetching group members or other server error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": { "error": "Internal Server Error", "details": "Error fetching group members" }
+              }
+            }
           }
         }
       }
@@ -244,9 +258,9 @@
           },
           "groups": {
             "type": "array",
-            "items": { "type": "string", "format": "uuid" },
-            "description": "List of group UUIDs to receive the notification. All users in these groups will receive the notification. Can be combined with users.",
-            "example": ["123e4567-e89b-12d3-a456-426614174010"]
+            "items": { "type": "string" },
+            "description": "List of group names to receive the notification. All users in these groups will receive the notification. Can be combined with users.",
+            "example": ["Administrators", "Developers"]
           },
           "title": {
             "type": "string",
