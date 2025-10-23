@@ -4,7 +4,7 @@ title: Team 7 – Live API
 ---
 <h2>Live API</h2>
 <iframe
-  src="https://sau-portal.de/document-management/swagger-ui/index.html#/"
+  src="https://sau-portal.de/dms/swagger-ui/index.html#/"
   title="Team 7 DMS API"
   style={{
     width: '100%',
