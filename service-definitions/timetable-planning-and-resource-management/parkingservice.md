@@ -14,7 +14,7 @@ Die **Parking Service API** stellt Informationen über die Auslastung von Parkpl
 ## 🔗 Basis-URL
 
 ```
-/parkingservice
+api/parkingservice
 ```
 
 ---
@@ -28,13 +28,13 @@ Die **Parking Service API** stellt Informationen über die Auslastung von Parkpl
 
 ---
 
-## 🔍 GET /parkingservice
+## 🔍 GET api/parkingservice
 
 Gibt die **Auslastung** des Parkplatzes an einem bestimmten Tag zurück.
 
 **Beispiel-Request:**
 ```http
-GET /parkingservice?parkingLotId=1&date=2025-11-07
+GET api/parkingservice?parkingLotId=1&date=2025-11-07
 ```
 
 **Beispiel-Response:**
@@ -57,9 +57,9 @@ GET /parkingservice?parkingLotId=1&date=2025-11-07
 
 ---
 
-## ➕ POST /parkingservice
+## ➕ POST api/parkingservice
 
-Fügt einen neuen Datensatz zur Parkplatz-Auslastung hinzu.  
+Fügt einen neuen Datensatz zur Parkplatz-Auslastung hinzu. (usedParkinglots +1) 
 **Nur für authentifizierte Benutzer.**
 
 **Antwort-Codes:**
@@ -73,7 +73,7 @@ Fügt einen neuen Datensatz zur Parkplatz-Auslastung hinzu.
 
 ---
 
-## ❌ DELETE /parkingservice
+## ❌ DELETE api/parkingservice
 
-Löscht einen User aus der Auslastung heraus.  
+Löscht einen User aus der Auslastung heraus. (usedParkinglots -1)  
 **Nur für authentifizierte Benutzer.**
