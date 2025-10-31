@@ -2,37 +2,43 @@
 
 ## General Structure
 
-### `antrag/nachklausur`
+### `/bachelorarbeit`
 
 #### POST
+
+- `thema`: date
+- `prüfer`: string
+- `prüfungstermin`: string
+- `expose`: file (PDF)
+
 Sends mail to Prüfungsamt for correcty submitted application.
 User gets notification of successful submission
-Following fields have to be provided: 
-- `modul`: dropdown
-- `pruefungstermin`: date
 Only accepts Content-Type: multipart/form-data
 
-### `antrag/nachklausur/{matrikelnummer}`
+### `/bachelorarbeit/{matrikelnummer}`
 
 ### GET
 
 Returns all applications with matching matrikelnummer.
 - `matrikelnummer`
 
-### `antrag/nachklausur/{id}`
+### `/bachelorarbeit/{id}`
 
 #### DELETE
 Deletes the application with the provided id from the database.
 - `id`
 
+
 # WEB
 
-### `antrag/nachklausur`
+### `antrag/bachelorarbeit`
 
 #### GET
 Empty application with the following fields:
-- `modul`: dropdown
-- `pruefungstermin`: date
+- `thema`: string
+- `prüfer`: dropdown of list
+- `startdate`: date
+- `expose`: file (PDF)
 
 #### POST
 Sends mail to Prüfungsamt for correcty submitted application.

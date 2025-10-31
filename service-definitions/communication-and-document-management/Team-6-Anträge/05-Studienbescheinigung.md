@@ -2,7 +2,7 @@
 
 ## General Structure
 
-### `antrag/studienbescheinigung`
+### `/studienbescheinigung`
 
 #### GET
 Download Studienbescheinigung.
