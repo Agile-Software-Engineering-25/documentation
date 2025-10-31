@@ -10,7 +10,20 @@ User gets notification of successful submission
 Following fields have to be provided: 
 - `modul`: dropdown
 - `pruefungstermin`: date
+Only accepts Content-Type: multipart/form-data
 
+### `antrag/nachklausur/{matrikelnummer}`
+
+### GET
+
+Returns all applications with matching matrikelnummer.
+- `matrikelnummer`
+
+### `antrag/nachklausur/{id}`
+
+#### DELETE
+Deletes the application with the provided id from the database.
+- `id`
 
 # WEB
 

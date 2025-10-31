@@ -13,14 +13,21 @@
 
 Sends mail to Prüfungsamt for correcty submitted application.
 User gets notification of successful submission
-
+Only accepts Content-Type: multipart/form-data
 
 ### `antrag/bachelorarbeit/{matrikelnummer}`
 
 ### GET
 
-Request to get Antrag for Bachelorarbeit by matrikelnummer
+Returns all applications with matching matrikelnummer.
 - `matrikelnummer`
+
+### `antrag/bachelorarbeit/{id}`
+
+#### DELETE
+Deletes the application with the provided id from the database.
+- `id`
+
 
 # WEB
 

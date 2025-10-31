@@ -4,7 +4,7 @@
 
 ### `antrag/studienbescheinigung`
 
-#### POST
+#### GET
 Download Studienbescheinigung.
 The Studienbescheinigung is being opened in PDF in a new web window
 
