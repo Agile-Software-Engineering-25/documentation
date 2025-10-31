@@ -10,6 +10,7 @@ User gets notification of successful submission
 Following fields have to be provided: 
 - `modul`: string
 - `pruefungstermin`: string in "dd-mm-yyyy" format
+
 Only accepts Content-Type: multipart/form-data
 
 ### `/nachklausur/{matrikelnummer}`

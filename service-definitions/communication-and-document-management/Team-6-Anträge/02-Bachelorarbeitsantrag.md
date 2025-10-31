@@ -12,7 +12,8 @@
 - `expose`: file (PDF)
 
 Sends mail to Prüfungsamt for correcty submitted application.
-User gets notification of successful submission
+User gets notification of successful submission.
+
 Only accepts Content-Type: multipart/form-data
 
 ### `/bachelorarbeit/{matrikelnummer}`

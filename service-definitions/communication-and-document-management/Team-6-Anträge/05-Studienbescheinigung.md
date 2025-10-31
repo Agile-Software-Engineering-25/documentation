@@ -9,7 +9,7 @@ Download Studienbescheinigung.
 The Studienbescheinigung is being opened in PDF in a new web window
 
 Following fields have to be given in the header: 
-- `ACCEPT_LANGUAGE` 
+- `ACCEPT_LANGUAGE`: Allowed values are "de" and "en".
 
 # WEB
 
