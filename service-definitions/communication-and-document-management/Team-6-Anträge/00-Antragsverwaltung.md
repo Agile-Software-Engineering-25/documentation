@@ -5,7 +5,7 @@ Team 4-06 provides the **Application Service**.
 This service is for the **Students** of the Provadis Hochschule in Frankfurt to be able to submit applications online.
 
 ---
-## Authentication
+## 🔐 Authentication
 When sending requests to the API, it is required to have a valid JWT token as a bearer token in the request for anything
 but the API root endpoint. Furthermore, allowed request methods are restricted by the owners roles as follows:
 
