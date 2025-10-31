@@ -1,5 +1,8 @@
 # API
 
+The API Root path is /api/antrag/.
+
+
 ## General Structure
 
 ### `/`
