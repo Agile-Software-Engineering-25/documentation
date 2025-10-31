@@ -17,7 +17,7 @@ Only accepts Content-Type: multipart/form-data
 
 ### `/bachelorarbeit/{matrikelnummer}`
 
-### GET
+#### GET
 
 Returns all applications with matching matrikelnummer.
 - `matrikelnummer`

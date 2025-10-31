@@ -14,7 +14,7 @@ Only accepts Content-Type: multipart/form-data
 
 ### `/nachklausur/{matrikelnummer}`
 
-### GET
+#### GET
 
 Returns all applications with matching matrikelnummer.
 - `matrikelnummer`
