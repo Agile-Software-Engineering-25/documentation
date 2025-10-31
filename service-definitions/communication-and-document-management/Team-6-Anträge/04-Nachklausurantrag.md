@@ -8,8 +8,8 @@
 Sends mail to Prüfungsamt for correcty submitted application.
 User gets notification of successful submission
 Following fields have to be provided: 
-- `modul`: dropdown
-- `pruefungstermin`: date
+- `modul`: string
+- `pruefungstermin`: string in "dd-mm-yyyy" format
 Only accepts Content-Type: multipart/form-data
 
 ### `/nachklausur/{matrikelnummer}`
@@ -17,13 +17,13 @@ Only accepts Content-Type: multipart/form-data
 #### GET
 
 Returns all applications with matching matrikelnummer.
-- `matrikelnummer`
+- `matrikelnummer`: String
 
 ### `/nachklausur/{id}`
 
 #### DELETE
 Deletes the application with the provided id from the database.
-- `id`
+- `id`: long
 
 # WEB
 

@@ -6,9 +6,9 @@
 
 #### POST
 
-- `thema`: date
+- `thema`: string
 - `prüfer`: string
-- `prüfungstermin`: string
+- `prüfungstermin`: string in "dd-mm-yyyy" format
 - `expose`: file (PDF)
 
 Sends mail to Prüfungsamt for correcty submitted application.
@@ -20,13 +20,13 @@ Only accepts Content-Type: multipart/form-data
 #### GET
 
 Returns all applications with matching matrikelnummer.
-- `matrikelnummer`
+- `matrikelnummer`: string
 
 ### `/bachelorarbeit/{id}`
 
 #### DELETE
 Deletes the application with the provided id from the database.
-- `id`
+- `id`: long
 
 
 # WEB
