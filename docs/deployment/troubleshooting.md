@@ -35,6 +35,13 @@ psql -h postgres.db -U ase-<team-number> -d appdb
 
 - Are you sure you used the correct password?
 
+- If your password contains special characters such as `{}`, `$`, `%`, or others, and is stored in the cluster as binary data, you must enclose it in quotation marks in your    secret definition.
+
+**Example:**
+```yaml
+POSTGRES_PASSWORD:"{your_pw}"
+```
+
 If your answer to the questions on top were all "Yes" contact Team 15. There might have been an error while distributing your password. Otherwise see the [db](db) documentation.
 
 ## Kubernetes
