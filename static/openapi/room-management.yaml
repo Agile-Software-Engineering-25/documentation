@@ -6,7 +6,7 @@ info:
     API for managing buildings and rooms in the Provadis complex.
     Supports CRUD operations for buildings and rooms, room bookings, and availability inquiries.
 servers:
-  - url: https://api.provadis.com/v1
+  - url: https://sau-portal.de/ase-1/room-mgmt
     description: Production server
 paths:
   /buildings:
@@ -160,6 +160,14 @@ paths:
       tags:
         - Rooms
       operationId: getRooms
+      parameters:
+        - name: composable
+          in: query
+          required: false
+          schema:
+            default: false
+            type: boolean
+            description: If true, only returns rooms that can be used to compose a new room.
       responses:
         '200':
           description: Success. Returns a list of all known rooms.
@@ -281,11 +289,46 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: force
+          in: query
+          required: false
+          description: Whether to force deletion even if the room has bookings assigned.
+          schema:
+            type: boolean
+            default: false
       responses:
         '204':
           description: Room deleted successfully.
         '400':
           description: The room has bookings assigned and cannot be deleted.
+        '404':
+          description: Room not found.
+  /rooms/{roomId}/deletable:
+    get:
+      summary: Checks whether a room can be deleted without force deleting.
+      tags:
+        - Rooms
+      operationId: isRoomDeletable
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The unique identifier of the room (UUID v7).
+      responses:
+        '200':
+          description: Response whether the room can be deleted without forcing (no bookings assigned).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deletable:
+                    type: boolean
+                required:
+                  - deletable
         '404':
           description: Room not found.
   /rooms/{roomId}/bookings:
@@ -448,6 +491,7 @@ components:
           description: Unique identifier for a building
         name:
           type: string
+          pattern: '^[A-Za-z0-9\-\.:]+$'
           description: Name of the building
           example: "Main Campus"
         address:
@@ -457,31 +501,28 @@ components:
         description:
           type: string
           description: Description of the building
-        state:
-          $ref: '#/components/schemas/BuildingState'
       required:
         - id
         - name
         - address
-        - state
     BuildingCreateRequest:
       type: object
       properties:
         name:
           type: string
           description: Name of the building
+          pattern: '^[A-Za-z0-9\-\.:]+$'
+          minLength: 1
+          maxLength: 16
         address:
           type: string
           description: Street address of the building
         description:
           type: string
           description: Description of the building
-        state:
-          $ref: '#/components/schemas/BuildingState'
       required:
         - name
         - address
-        - state
     Room:
       type: object
       properties:
@@ -490,6 +531,9 @@ components:
           format: uuid
         name:
           type: string
+        chemSymbol:
+          type: string
+          pattern: '^[A-Za-z0-9\-\.:]+$'
         buildingId:
           type: string
           format: uuid
@@ -498,16 +542,31 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Characteristic'
+        composedOf:
+          type: array
+          items:
+            $ref: '#/components/schemas/Room'
+          description: List of rooms this room is made of.
       required:
         - id
         - name
         - buildingId
         - characteristics
+        - chemSymbol
+        - composedOf
     RoomCreateRequest:
       type: object
       properties:
         name:
           type: string
+          pattern: '^[A-Za-z0-9\-\.:]+$'
+          minLength: 1
+          maxLength: 16
+        chemSymbol:
+          type: string
+          pattern: '^[A-Za-z0-9\-\.:]+$'
+          minLength: 1
+          maxLength: 16
         buildingId:
           type: string
           format: uuid
@@ -515,10 +574,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Characteristic'
+        composedOf:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of room IDs that this room is made of.
       required:
         - name
+        - chemSymbol
         - buildingId
         - characteristics
+        - composedOf
     Characteristic:
       type: object
       properties:
@@ -584,12 +651,11 @@ components:
           items:
             type: string
             format: uuid
-        studentGroupIds:
+        studentGroupNames:
           type: array
           uniqueItems: true
           items:
             type: string
-            format: uuid
         groupSize:
           type: integer
           minimum: 1
@@ -604,7 +670,7 @@ components:
         - startTime
         - endTime
         - lecturerIds
-        - studentGroupIds
+        - studentGroupNames
     GetAllRoomsResponse:
       type: object
       properties:
@@ -623,12 +689,6 @@ components:
             $ref: '#/components/schemas/Booking'
       required:
         - bookings
-    BuildingState:
-      type: string
-      description: Describes the operational state of a building.
-      enum:
-        - open
-        - closed
     Booking:
       type: object
       properties:
@@ -644,12 +704,11 @@ components:
           items:
             type: string
             format: uuid
-        studentGroupIds:
+        studentGroupNames:
           type: array
           uniqueItems: true
           items:
             type: string
-            format: uuid
         startTime:
           type: string
           format: date-time
@@ -661,5 +720,5 @@ components:
         - roomId
         - startTime
         - endTime
-        - studentGroupIds
+        - studentGroupNames
         - lecturerIds
